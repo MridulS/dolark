@@ -8,7 +8,7 @@
         
         
         <link rel="shortcut icon" href="../img/favicon.ico">
-        <title>Shocks - DolARK</title>
+        <title>Equilibrium - DolARK</title>
         <link href="../css/bootstrap-custom.min.css" rel="stylesheet">
         <link href="../css/font-awesome.min.css" rel="stylesheet">
         <link href="../css/base.css" rel="stylesheet">
@@ -52,11 +52,11 @@
                             <li >
                                 <a href="../about/">About</a>
                             </li>
-                            <li class="active">
-                                <a href="./">Shocks</a>
-                            </li>
                             <li >
-                                <a href="../equilibrium/">Equilibrium</a>
+                                <a href="../shocks/">Shocks</a>
+                            </li>
+                            <li class="active">
+                                <a href="./">Equilibrium</a>
                             </li>
                             <li >
                                 <a href="../perturbation/">Perturbation</a>
@@ -70,12 +70,12 @@
                             </a>
                         </li>
                             <li >
-                                <a rel="next" href="../about/">
+                                <a rel="next" href="../shocks/">
                                     <i class="fa fa-arrow-left"></i> Previous
                                 </a>
                             </li>
                             <li >
-                                <a rel="prev" href="../equilibrium/">
+                                <a rel="prev" href="../perturbation/">
                                     Next <i class="fa fa-arrow-right"></i>
                                 </a>
                             </li>
@@ -87,57 +87,12 @@
         <div class="container">
                 <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
     <ul class="nav bs-sidenav">
-        <li class="main active"><a href="#shocks">Shocks</a></li>
-            <li><a href="#exogenous-shocks-specification">Exogenous shocks specification</a></li>
+        <li class="main active"><a href="#time-invariant-equilibrium">Time-invariant equilibrium</a></li>
     </ul>
 </div></div>
                 <div class="col-md-9" role="main">
 
-<h1 id="shocks">Shocks</h1>
-<h2 id="exogenous-shocks-specification">Exogenous shocks specification</h2>
-<p>The type of exogenous shock associated to a model determines the kind of
-decision rule, whih will be obtained by the solvers. Shocks can pertain
-to one of the following categories: continuous i.i.d. shocks (Normal
-law), continous autocorrelated process (VAR1 process) or a discrete
-markov chain. The type of the shock is specified using yaml type
-annotations (starting with exclamation mark) The exogenous shock section
-can refer to parameters specified in the calibration section. Here are
-some Examples for each type of shock:</p>
-<h3 id="normal">Normal</h3>
-<p>For Dynare and continuous-states models, one has to specifiy a
-multivariate distribution of the i.i.d. process for the vector of
-<code>shocks</code> (otherwise shocks are assumed to be constantly 0). This is done
-in the distribution section. A gaussian distrubution (only one supported
-so far), is specified by supplying the covariance matrix as a list of
-list as in the following example.</p>
-<pre><code class="yaml">exogenous: !Normal:
-    Sigma: [ [sigma_1, 0.0],
-            [0.0, sigma_2] ]
-</code></pre>
-
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>The shocks syntax is currently rather unforgiving. Normal shocks expect
-a covariance matrix (i.e. a list of list) and the keyword is
-<code>Sigma</code>, not <code>sigma</code>.</p>
-</div>
-<h3 id="markov-chains">Markov chains</h3>
-<p>Markov chains are constructed by providing a list of nodes and a
-transition matrix.</p>
-<pre><code class="yaml">exogenous: !MarkovChain
-    values: [[-0.01, 0.1],[0.01, 0.1]]
-    transitions: [[0.9, 0.1], [0.1, 0.9]]
-</code></pre>
-
-<p>It is also possible to combine markov chains together.</p>
-<pre><code class="yaml">exogenous: !MarkovTensor:
-    - !MarkovChain
-        values: [[-0.01, 0.1],[0.01, 0.1]]
-        transitions: [[0.9, 0.1], [0.1, 0.9]]
-    - !MarkovChain
-        values: [[-0.01, 0.1],[0.01, 0.1]]
-        transitions: [[0.9, 0.1], [0.1, 0.9]]
-</code></pre></div>
+<h2 id="time-invariant-equilibrium">Time-invariant equilibrium</h2></div>
         </div>
 
         <footer class="col-md-12">

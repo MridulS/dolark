@@ -52,6 +52,15 @@
                             <li >
                                 <a href="about/">About</a>
                             </li>
+                            <li >
+                                <a href="shocks/">Shocks</a>
+                            </li>
+                            <li >
+                                <a href="equilibrium/">Equilibrium</a>
+                            </li>
+                            <li >
+                                <a href="perturbation/">Perturbation</a>
+                            </li>
                         </ul>
 
                     <ul class="nav navbar-nav navbar-right">
@@ -88,14 +97,15 @@
 
 <h1 id="dolarkjl">DolARK.jl</h1>
 <h2 id="introduction">Introduction</h2>
+<p>DolARK is an experimental project to solve heterogenous agents models with infinitely lived agents. It relies on <a href="https://EconForge.github.io/dolo/">Dolo</a> to model individual agents behavious and extends its modeling language to describe distributions of agents and aggregate dynamics.</p>
+<p>We aim to support the following basic cases:</p>
 <ul>
-<li><code>mkdocs new [dir-name]</code> - Create a new project.</li>
-<li><code>mkdocs serve</code> - Start the live-reloading docs server.</li>
-<li><code>mkdocs build</code> - Build the documentation site.</li>
-<li><code>mkdocs help</code> - Print this help message.</li>
+<li>heterogenous preferences, <a href="equilibrium/">no aggregate risk</a></li>
+<li>homogenous preferences, <a href="perturbation/">perturbation</a> w.r.t. aggregate risk</li>
+<li>homogenous preferences, dimension reduction of the state-space a la <a href="krussell_smith/">Krussell-Smith</a></li>
 </ul>
 <h2 id="frequently-asked-questions">Frequently Asked Questions</h2>
-<p>No question was ever asked. It's all very clear.</p>
+<p>No question was ever asked. Certainly because it's all very clear.</p>
 <h2 id="developper-corner">Developper Corner</h2>
 <h3 id="contribute-to-the-documentation">Contribute to the documentation</h3>
 <p>Documentation is contained in the docs subdirectory.
@@ -190,5 +200,5 @@ On a regular basis, latest version is deployed to github pages <a href="http://w
 
 <!--
 MkDocs version : 1.0.4
-Build Date UTC : 2019-09-25 15:01:05
+Build Date UTC : 2019-09-25 15:34:57
 -->
