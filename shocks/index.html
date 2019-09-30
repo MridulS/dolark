@@ -92,42 +92,138 @@
     <ul class="nav bs-sidenav">
         <li class="main active"><a href="#shocks">Shocks</a></li>
             <li><a href="#exogenous-shocks-specification">Exogenous shocks specification</a></li>
+            <li><a href="#discretization-methods-for-continous-shocks">Discretization methods for continous shocks</a></li>
     </ul>
 </div></div>
                 <div class="col-md-9" role="main">
 
 <h1 id="shocks">Shocks</h1>
-<h2 id="exogenous-shocks-specification">Exogenous shocks specification</h2>
 <p>The type of exogenous shock associated to a model determines the kind of
-decision rule, whih will be obtained by the solvers. Shocks can pertain
-to one of the following categories: continuous i.i.d. shocks (Normal
-law), continous autocorrelated process (VAR1 process) or a discrete
-markov chain. The type of the shock is specified using yaml type
-annotations (starting with exclamation mark) The exogenous shock section
-can refer to parameters specified in the calibration section. Here are
-some Examples for each type of shock:</p>
-<h3 id="normal">Normal</h3>
-<p>For Dynare and continuous-states models, one has to specifiy a
-multivariate distribution of the i.i.d. process for the vector of
-<code>shocks</code> (otherwise shocks are assumed to be constantly 0). This is done
-in the distribution section. A gaussian distrubution (only one supported
-so far), is specified by supplying the covariance matrix as a list of
-list as in the following example.</p>
-<pre><code class="yaml">exogenous: !Normal:
-    Sigma: [ [sigma_1, 0.0],
-            [0.0, sigma_2] ]
+decision rule, which will be obtained by the solvers. Shocks can pertain
+to one of the following categories:</p>
+<ul>
+<li>
+<p>continuous i.i.d. shocks</p>
+</li>
+<li>
+<p>continous autocorrelated process (VAR1 process)</p>
+</li>
+<li>
+<p>discrete
+markov chain.</p>
+</li>
+</ul>
+<h2 id="exogenous-shocks-specification">Exogenous shocks specification</h2>
+<p>Exogenous shock processes are specified in the section exogenous . Dolo accepts various exogenous processes such as normally distributed iid shocks, VAR1 processes, and Markov Chain processes.</p>
+<p>Here are some examples for each type of shock:</p>
+<h3 id="iid-univariate">IID Univariate</h3>
+<p>....</p>
+<h4 id="iid-normal">IID Normal</h4>
+<p>The type of the shock is specified using yaml type annotations (starting with exclamation mark)</p>
+<p>Normal distribution with mean mu and variance σ^2 has the probability density function</p>
+<div>
+<div class="MathJax_Preview">f(x; \mu, \sigma) = \frac{1}{\sqrt{2 \pi \sigma^2}}
+\exp \left( - \frac{(x - \mu)^2}{2 \sigma^2} \right)</div>
+<script type="math/tex; mode=display">f(x; \mu, \sigma) = \frac{1}{\sqrt{2 \pi \sigma^2}}
+\exp \left( - \frac{(x - \mu)^2}{2 \sigma^2} \right)</script>
+</div>
+<p>A normal shock in the yaml file with mean 0.2 and standard deviation 0.1 can be declared as follows</p>
+<pre><code>exogenous: !Normal:
+    σ: 0.1
+    μ: 0.2
+</code></pre>
+
+<p>or</p>
+<pre><code>exogenous: !Normal:
+    sigma: 0.1
+    mu: 0.2
 </code></pre>
 
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>The shocks syntax is currently rather unforgiving. Normal shocks expect
-a covariance matrix (i.e. a list of list) and the keyword is
-<code>Sigma</code>, not <code>sigma</code>.</p>
+<p>Greek letter 'σ' or 'sigma' (similarly 'μ' or 'mu' ) are accepted, thanks to the greek translation function.</p>
 </div>
+<p>The exogenous shock section can refer to parameters specified in the calibration section:</p>
+<pre><code>symbols:
+      states: [a, b]
+      controls: [c, d]
+      exogenous: [e]
+      parameters: [alpha, beta, mu, sigma]
+
+.
+.
+.
+
+exogenous: !Normal:
+      σ: sigma
+      μ: mu
+
+</code></pre>
+
+<h4 id="iid-lognormal">IID LogNormal</h4>
+<p>Parametrization of a lognormal random variable Y is in terms of he mean, μ, and standard deviation, σ, of the unique normally distributed random variable X is as follows</p>
+<div>
+<div class="MathJax_Preview">f(x; \mu, \sigma) = \frac{1}{x \sqrt{2 \pi \sigma^2}}
+\exp \left( - \frac{(\log(x) - \mu)^2}{2 \sigma^2} \right),
+\quad x &gt; 0</div>
+<script type="math/tex; mode=display">f(x; \mu, \sigma) = \frac{1}{x \sqrt{2 \pi \sigma^2}}
+\exp \left( - \frac{(\log(x) - \mu)^2}{2 \sigma^2} \right),
+\quad x > 0</script>
+</div>
+<p>such that exp(X) = Y</p>
+<pre><code>exogenous: !LogNormal:
+      σ: sigma
+      μ: mu
+
+</code></pre>
+
+<h4 id="uniform">Uniform</h4>
+<p>Uniform distribution over an interval [a,b]</p>
+<div>
+<div class="MathJax_Preview">f(x; a, b) = \frac{1}{b - a}, \quad a \le x \le b</div>
+<script type="math/tex; mode=display">f(x; a, b) = \frac{1}{b - a}, \quad a \le x \le b</script>
+</div>
+<pre><code>symbols:
+      states: [k]
+      controls: [c, d]
+      exogenous: [e]
+      parameters: [alpha, beta, mu, sigma, e_min, e_max]
+
+.
+.
+.
+
+exogenous: !Uniform:
+      a: e_min
+      b: e_max
+
+</code></pre>
+
+<h4 id="beta">Beta</h4>
+<p>If X∼Gamma(α) and Y∼Gamma(β) are distributed independently, then X/(X+Y)∼Beta(α,β).</p>
+<p>Beta distribution with shape parameters α and β has the following PDF</p>
+<div>
+<div class="MathJax_Preview">f(x; \alpha, \beta) = \frac{1}{B(\alpha, \beta)} x^{\alpha - 1} (1 x)^{\beta - 1}, \quad x \in [0, 1]</div>
+<script type="math/tex; mode=display">f(x; \alpha, \beta) = \frac{1}{B(\alpha, \beta)} x^{\alpha - 1} (1 x)^{\beta - 1}, \quad x \in [0, 1]</script>
+</div>
+<pre><code>exogenous: !Beta:
+      α: 0.3
+      β: 0.1
+
+</code></pre>
+
+<h3 id="autoregressive-process">Autoregressive process</h3>
+<h4 id="var1">VAR(1)</h4>
+<h4 id="ar1">AR(1)</h4>
+<pre><code>exogenous: !AR1
+    rho: 0.9
+    Sigma: [[σ^2]]
+</code></pre>
+
 <h3 id="markov-chains">Markov chains</h3>
 <p>Markov chains are constructed by providing a list of nodes and a
 transition matrix.</p>
-<pre><code class="yaml">exogenous: !MarkovChain
+<pre><code>exogenous: !MarkovChain
     values: [[-0.01, 0.1],[0.01, 0.1]]
     transitions: [[0.9, 0.1], [0.1, 0.9]]
 </code></pre>
@@ -140,7 +236,71 @@ transition matrix.</p>
     - !MarkovChain
         values: [[-0.01, 0.1],[0.01, 0.1]]
         transitions: [[0.9, 0.1], [0.1, 0.9]]
-</code></pre></div>
+</code></pre>
+
+<h3 id="product">Product</h3>
+<p>We can also specify more than one process. For instance if we want to combine a VAR1 and an Normal Process we use the tag Product and write:</p>
+<pre><code>exogenous: !Product
+    p1: !VAR1
+         rho: 0.75
+         Sigma: [[0.015^2]]
+
+         N: 3
+
+    p2: !Normal:
+          σ: sigma
+          μ: mu
+</code></pre>
+
+<h3 id="mixtures">Mixtures</h3>
+<p>...</p>
+<h2 id="discretization-methods-for-continous-shocks">Discretization methods for continous shocks</h2>
+<p>To solve a non-linear model with a given exogenous process, one can apply different types of procedures to discretize the continous process:</p>
+<table>
+<thead>
+<tr>
+<th>Type</th>
+<th>Distribution</th>
+<th>Discretization procedure</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Univariate iid</td>
+<td>UNormal(μ, σ)</td>
+<td>Equiprobable, Gauss-Hermite Nodes</td>
+</tr>
+<tr>
+<td>Univariate iid</td>
+<td>LogNormal(μ, σ)</td>
+<td>Equiprobable</td>
+</tr>
+<tr>
+<td>Univariate iid</td>
+<td>Uniform(a, b )</td>
+<td>Equiprobable</td>
+</tr>
+<tr>
+<td>Univariate iid</td>
+<td>Beta(α, β)</td>
+<td>Equiprobable</td>
+</tr>
+<tr>
+<td>Univariate iid</td>
+<td>Beta(α, β)</td>
+<td>Equiprobable</td>
+</tr>
+<tr>
+<td>VAR1</td>
+<td></td>
+<td>Generalized Discretization Method (GDP), Markov Chain</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Here we can define shortly each method. Then perhaps link to a jupyter notebook as discussed: Conditional on the discretization approach, present the results of the corresponding method solutions and simulations. Discuss further discretization methods and related dolo objects.</p>
+</div></div>
         </div>
 
         <footer class="col-md-12">
