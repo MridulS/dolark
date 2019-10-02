@@ -92,6 +92,10 @@
     <ul class="nav bs-sidenav">
         <li class="main active"><a href="#shocks">Shocks</a></li>
             <li><a href="#iid-distributions">IID Distributions</a></li>
+            <li><a href="#continuous-autoregressive-process">Continuous Autoregressive Process</a></li>
+            <li><a href="#markov-chains">Markov chains</a></li>
+            <li><a href="#product">Product</a></li>
+            <li><a href="#conditional-processes">Conditional processes</a></li>
             <li><a href="#discretization-methods-for-continous-shocks">Discretization methods for continous shocks</a></li>
     </ul>
 </div></div>
@@ -104,11 +108,10 @@
 <p>continuous i.i.d. shocks</p>
 </li>
 <li>
-<p>continous autocorrelated process (VAR1 process)</p>
+<p>continuous auto-correlated process</p>
 </li>
 <li>
-<p>discrete
-markov chain.</p>
+<p>discrete markov chain.</p>
 </li>
 </ul>
 <p>Exogenous shock processes are specified in the section <code>exogenous</code> of a yaml file.. Dolo accepts various exogenous processes such as normally distributed iid shocks, VAR1 processes, and Markov Chain processes.</p>
@@ -207,46 +210,52 @@ exogenous: !Uniform:
 <h4 id="bernouilli">Bernouilli</h4>
 <p>Binomial distribution parameterized by <span><span class="MathJax_Preview">p</span><script type="math/tex">p</script></span> yields <span><span class="MathJax_Preview">1</span><script type="math/tex">1</script></span> with probability <span><span class="MathJax_Preview">p</span><script type="math/tex">p</script></span> and <span><span class="MathJax_Preview">0</span><script type="math/tex">0</script></span> with probability <span><span class="MathJax_Preview">1-p</span><script type="math/tex">1-p</script></span>.</p>
 <pre class="highlight"><code>!Bernouilli
-      p: 0.3</code></pre>
+      π: 0.3</code></pre>
 
-<h4 id="mixtures">Mixtures</h4>
+<h3 id="multivariate-distributions">Multivariate distributions</h3>
+<h4 id="normal-multivariate">Normal (multivariate)</h4>
+<p>Note the difference with <code>UNormal</code>. Parameters <code>Σ</code> (not <code>σ</code>) and <code>μ</code> take a matrix and a vector respectively as argument.
+<pre class="highlight"><code>!Normal:
+      Σ: [[0.0]]
+      μ: [0.1]</code></pre></p>
+<h3 id="mixtures">Mixtures</h3>
 <p>For now, mixtures are defined for i.i.d. processes only. They take an integer valued distribution (like the Bernouilli one) and a different distribution associated to each of the values.</p>
 <pre class="highlight"><code>!Mixture
-    index: !Bernouilli
-        p: 0.3
-    distributions:
-        0: UNormal(μ=0.0, σ=0.01)
-        1: UNormal(μ=0.0, σ=0.02)</code></pre>
+index: !Bernouilli
+p: 0.3
+distributions:
+0: UNormal(μ=0.0, σ=0.01)
+1: UNormal(μ=0.0, σ=0.02)</code></pre>
 
 <p>Mixtures are not restricted to 1d distributions, but all distributions of the mixture must have the same dimension.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
+</div>
 <p>Right now, mixtures accept only distributions as values. To switch between constants, one can use a <code>Constant</code> distribution as in the following examples.</p>
 <pre class="highlight"><code>...
 exogenous:
-      e,v: !Mixture:
-            index: !Bernouilli
-              p: 0.3
-            distributions:
-              0: Constant(μ=[0.1, 0.2])
-              1: Constant(μ=[0.2, 0.3])</code></pre>
+e,v: !Mixture:
+index: !Bernouilli
+p: 0.3
+distributions:
+0: Constant(μ=[0.1, 0.2])
+1: Constant(μ=[0.2, 0.3])</code></pre>
 
-</div>
-<h3 id="autoregressive-process">Autoregressive process</h3>
-<h4 id="var1">VAR(1)</h4>
-<h4 id="ar1">AR(1)</h4>
+<h2 id="continuous-autoregressive-process">Continuous Autoregressive Process</h2>
+<h3 id="ar1-var1">AR1 / VAR1</h3>
+<p>For now, <code>AR1</code> is an alias for <code>VAR1</code>. Autocorrelation <code>ρ</code> must be a scalar (otherwise we don't know how to discretize).</p>
 <pre class="highlight"><code>exogenous: !AR1
-    rho: 0.9
-    Sigma: [[σ^2]]</code></pre>
+rho: 0.9
+Sigma: [[σ^2]]</code></pre>
 
-<h3 id="markov-chains">Markov chains</h3>
+<h2 id="markov-chains">Markov chains</h2>
 <p>Markov chains are constructed by providing a list of nodes and a
 transition matrix.</p>
 <pre class="highlight"><code>exogenous: !MarkovChain
     values: [[-0.01, 0.1],[0.01, 0.1]]
     transitions: [[0.9, 0.1], [0.1, 0.9]]</code></pre>
 
-<h3 id="product">Product</h3>
+<h2 id="product">Product</h2>
 <p>We can also specify more than one process. For instance if we want to combine a VAR1 and an Normal Process we use the tag Product and write:</p>
 <pre class="highlight"><code>exogenous: !Product
 
@@ -276,7 +285,7 @@ exogenous:
 
 <p>In this case we define several shocks for several variables (or combinations thereof).</p>
 </div>
-<h3 id="conditional-processes">Conditional processes</h3>
+<h2 id="conditional-processes">Conditional processes</h2>
 <p>Support is very limited for now. It is possible to define markov chains, whose transitions (not the values) depend on the output of another process.</p>
 <pre class="highlight"><code>exogenous: !Conditional
     condition: !UNormal
