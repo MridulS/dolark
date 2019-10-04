@@ -50,9 +50,6 @@
                             <li >
                                 <a href="..">Home</a>
                             </li>
-                            <li >
-                                <a href="../shocks/">Shocks</a>
-                            </li>
                             <li class="active">
                                 <a href="./">Equilibrium</a>
                             </li>
@@ -61,6 +58,9 @@
                             </li>
                             <li >
                                 <a href="../krussell_smith/">Krussell-Smith</a>
+                            </li>
+                            <li >
+                                <a href="../shocks/">Shocks</a>
                             </li>
                         </ul>
 
@@ -71,7 +71,7 @@
                             </a>
                         </li>
                             <li >
-                                <a rel="next" href="../shocks/">
+                                <a rel="next" href="..">
                                     <i class="fa fa-arrow-left"></i> Previous
                                 </a>
                             </li>
@@ -164,11 +164,8 @@ equilibrium:
         aggres_0 = np.array( [kd - y0[0] ])
         return aggres_0</code></pre></div>
 </div>
-<p>Now, a model with idiosyncratic hetorogeneity:</p>
-<div class="superfences-tabs">
-<input name="__tabs_2" type="radio" id="__tab_2_0" checked="checked" />
-<label for="__tab_2_0">yaml</label>
-<div class="superfences-content"><pre class="highlight"><code class="language-yaml">symbols:
+<p>Now, a model with idiosyncratic heterogeneity:</p>
+<pre class="highlight"><code class="language-yaml">symbols:
     exogenous: [z]
     aggregate: [K]
     parameters = [A, alpha, delta, ρ]
@@ -193,7 +190,6 @@ heterogeneity:
     β: Uniform:
         a: 0.95
         b: 0.96</code></pre></div>
-</div></div>
         </div>
 
         <footer class="col-md-12">
