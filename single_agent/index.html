@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        
+        
+        <link rel="shortcut icon" href="../img/favicon.ico">
+        <title>Single agent - DolARK</title>
+        <link href="../css/bootstrap-custom.min.css" rel="stylesheet">
+        <link href="../css/font-awesome.min.css" rel="stylesheet">
+        <link href="../css/base.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
+        <link href="../css/extra.css" rel="stylesheet">
+        <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!--[if lt IE 9]>
+            <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+            <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+        <![endif]-->
+
+        <script src="../js/jquery-1.10.2.min.js" defer></script>
+        <script src="../js/bootstrap-3.0.3.min.js" defer></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+        <script>hljs.initHighlightingOnLoad();</script> 
+    </head>
+
+    <body>
+
+        <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+            <div class="container">
+
+                <!-- Collapsed navigation -->
+                <div class="navbar-header">
+                    <!-- Expander button -->
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="..">DolARK</a>
+                </div>
+
+                <!-- Expanded navigation -->
+                <div class="navbar-collapse collapse">
+                        <!-- Main navigation -->
+                        <ul class="nav navbar-nav">
+                            <li >
+                                <a href="..">Home</a>
+                            </li>
+                            <li >
+                                <a href="../shocks/">Shocks</a>
+                            </li>
+                            <li >
+                                <a href="../equilibrium/">Equilibrium</a>
+                            </li>
+                            <li >
+                                <a href="../perturbation/">Perturbation</a>
+                            </li>
+                            <li >
+                                <a href="../krussell_smith/">Krussell-Smith</a>
+                            </li>
+                        </ul>
+
+                    <ul class="nav navbar-nav navbar-right">
+                        <li>
+                            <a href="#" data-toggle="modal" data-target="#mkdocs_search_modal">
+                                <i class="fa fa-search"></i> Search
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+                <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
+    <ul class="nav bs-sidenav">
+        <li class="main active"><a href="#single-agent-program">Single-Agent Program</a></li>
+            <li><a href="#the-yaml-file">The YAML file</a></li>
+            <li><a href="#an-example-aiyagari-1994">An Example: Aiyagari (1994)</a></li>
+    </ul>
+</div></div>
+                <div class="col-md-9" role="main">
+
+<h2 id="single-agent-program">Single-Agent Program</h2>
+<p>Given a vector of aggregate endogenous variables (e.g. wages or interest rates), the program of the single-agent can be solved using traditional methods in computational economics. In DolARK, we use <a href="https://github.com/EconForge/dolo">dolo</a> to do so. At this point, the only relevant question concerns the proper writing of the YAML file including these aggregate endogenous variables.</p>
+<h3 id="the-yaml-file">The YAML file</h3>
+<p>To be more specific, the introduction of aggregate endogenous variables amends the YAML file in two ways:
+1. Aggregate endogenous variables are first declared in the <code>exogenous</code> subsection of the <code>symbols</code> section.
+2. We then specify an additional <code>!ConstantProcess</code> entry in the <code>exogenous</code> section to initalize the behavior of aggregate endogenous variables.</p>
+<p>The rest of the YAML file writes following the <a href="https://dolo.readthedocs.io/en/latest/">documentation of dolo</a></p>
+<h3 id="an-example-aiyagari-1994">An Example: Aiyagari (1994)</h3>
+<p>Consider the model proposed by Aiyagari (1994). The economy includes one homogeneous good, which is produced with labor and capital. There exists a continuum of households who inelastically supply labor, receive wage <span><span class="MathJax_Preview">w</span><script type="math/tex">w</script></span> and face idiosyncratic employment shocks <span><span class="MathJax_Preview">e</span><script type="math/tex">e</script></span>. Households may consume <span><span class="MathJax_Preview">c</span><script type="math/tex">c</script></span> and save <span><span class="MathJax_Preview">a</span><script type="math/tex">a</script></span>, which yields interests at rate <span><span class="MathJax_Preview">r</span><script type="math/tex">r</script></span>. Households are credit-constrained ; they cannot borrow beyond a cap <span><span class="MathJax_Preview">\underline{a}</span><script type="math/tex">\underline{a}</script></span>. An household's value function verifies</p>
+<div>
+<div class="MathJax_Preview">v_t(k_t) = \max_{c_t} u(c_t) + \beta \mathbb E_t v_{t+1}(k_{t+1})$$
+subject to
+$$c_t + a_{t+1} =  (1+r) a_t + e_t w \quad \text{and} \quad a \geq \underline{a}</div>
+<script type="math/tex; mode=display">v_t(k_t) = \max_{c_t} u(c_t) + \beta \mathbb E_t v_{t+1}(k_{t+1})$$
+subject to
+$$c_t + a_{t+1} =  (1+r) a_t + e_t w \quad \text{and} \quad a \geq \underline{a}</script>
+</div>
+<p>Firms in perfect competition produce the homogeneous good with a Cobb-Douglas technology and choose inputs to maximize profits. Thus, the representative firm's program is</p>
+<div>
+<div class="MathJax_Preview">\max_{K_t,L} A K^\alpha L^{1-\alpha} - (r+\delta) K_t - w L</div>
+<script type="math/tex; mode=display">\max_{K_t,L} A K^\alpha L^{1-\alpha} - (r+\delta) K_t - w L</script>
+</div>
+<p>where
+- <span><span class="MathJax_Preview">K_t</span><script type="math/tex">K_t</script></span> is aggregate capital
+- <span><span class="MathJax_Preview">L</span><script type="math/tex">L</script></span> is aggregate labor supply
+- <span><span class="MathJax_Preview">\delta</span><script type="math/tex">\delta</script></span> is the depreciation rate of capital
+- <span><span class="MathJax_Preview">A</span><script type="math/tex">A</script></span> is the scale factor of production
+- <span><span class="MathJax_Preview">\alpha</span><script type="math/tex">\alpha</script></span> is the output elasticity w.r.t capital</p>
+<p>The first-order conditions of the firm's program deliver expressions for <span><span class="MathJax_Preview">r</span><script type="math/tex">r</script></span> and <span><span class="MathJax_Preview">w</span><script type="math/tex">w</script></span>.</p>
+<div>
+<div class="MathJax_Preview">
+r = A \alpha  \left( \frac{L}{K} \right)^{1 - \alpha} - \delta\\
+w = A (1-\alpha) \left( \frac{L}{K} \right)^{\alpha}
+</div>
+<script type="math/tex; mode=display">
+r = A \alpha  \left( \frac{L}{K} \right)^{1 - \alpha} - \delta\\
+w = A (1-\alpha) \left( \frac{L}{K} \right)^{\alpha}
+</script>
+</div>
+<p>In this example, the aggregate endogenous variables are the interest rate <span><span class="MathJax_Preview">r</span><script type="math/tex">r</script></span> and the wage <span><span class="MathJax_Preview">w</span><script type="math/tex">w</script></span>. The two modifications stated in the previous paragraph appear
+1. in the <code>exogenous</code> subsection of the <code>symbols</code> section looks like
+<pre class="highlight"><code>    symbols:
+    ...
+        exogenous: [r,w,e]
+    ...</code></pre>
+2. in the <code>exogenous</code> section
+<pre class="highlight"><code>    exogenous:
+    ...
+        r,w: !ConstantProcess
+            μ: [r, w]
+    ...</code></pre></p>
+<p>Overall, , assuming that logged <span><span class="MathJax_Preview">e</span><script type="math/tex">e</script></span> follow an AR1 with persistence <span><span class="MathJax_Preview">\rho = 0.95</span><script type="math/tex">\rho = 0.95</script></span> and standard deviation <span><span class="MathJax_Preview">\sigma = 0.06</span><script type="math/tex">\sigma = 0.06</script></span>, the corresponding YAML file looks like</p>
+<pre class="highlight"><code>    symbols:
+        states: [a]
+        exogenous: [r, w, e]
+        parameters: [alpha, L, delta, beta, a_min, a_max]
+        controls: [i]
+
+
+    definitions:
+        c: (1+r)*a+w*exp(e) - i
+
+    equations:
+
+        arbitrage:
+            - 1-beta*(1+r(+1))*c/c(+1) | -B &lt;= i &lt;= (1+r)*a+w*exp(e)
+
+        transition:
+            - a = i(-1)
+
+    calibration:
+        ...
+        r: alpha*(L/K)**(1-alpha) - delta
+        w: (1-alpha)*(K/L)**(alpha)
+        ...
+    domain:
+        a: [a_min, a_max]
+
+    exogenous:
+        r,w: !ConstantProcess
+            μ: [r, w]
+        e: !VAR1
+            ρ: 0.95
+            Σ: [[0.06**2]]
+
+    options:
+        grid:
+            !Cartesian
+            orders: [30]</code></pre></div>
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+            <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
+        </footer>
+        <script>
+            var base_url = "..",
+                shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
+        </script>
+        <script src="../js/base.js" defer></script>
+        <script src="../mathjax-config.js" defer></script>
+        <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" defer></script>
+        <script src="../search/main.js" defer></script>
+
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="Search Modal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="exampleModalLabel">Search</h4>
+            </div>
+            <div class="modal-body">
+                <p>
+                    From here you can search these documents. Enter
+                    your search terms below.
+                </p>
+                <form role="form">
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
+                    </div>
+                </form>
+                <div id="mkdocs-search-results"></div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="Keyboard Shortcuts Modal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="exampleModalLabel">Keyboard Shortcuts</h4>
+            </div>
+            <div class="modal-body">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th style="width: 20%;">Keys</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="help shortcut"><kbd>?</kbd></td>
+                    <td>Open this help</td>
+                  </tr>
+                  <tr>
+                    <td class="next shortcut"><kbd>n</kbd></td>
+                    <td>Next page</td>
+                  </tr>
+                  <tr>
+                    <td class="prev shortcut"><kbd>p</kbd></td>
+                    <td>Previous page</td>
+                  </tr>
+                  <tr>
+                    <td class="search shortcut"><kbd>s</kbd></td>
+                    <td>Search</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+    </body>
+</html>
