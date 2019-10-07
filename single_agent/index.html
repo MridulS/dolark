@@ -91,38 +91,162 @@
         <div class="container">
                 <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
     <ul class="nav bs-sidenav">
-        <li class="main active"><a href="#single-agent-program">Single-Agent Program</a></li>
-            <li><a href="#the-yaml-file">The YAML file</a></li>
-            <li><a href="#an-example-aiyagari-1994">An Example: Aiyagari (1994)</a></li>
+        <li class="main active"><a href="#model-specification">Model specification</a></li>
+            <li><a href="#single-agent-program">Single-Agent Program</a></li>
     </ul>
 </div></div>
                 <div class="col-md-9" role="main">
 
+<h1 id="model-specification">Model specification</h1>
 <h2 id="single-agent-program">Single-Agent Program</h2>
-<p>Given a vector of aggregate endogenous variables (e.g. wages or interest rates), the program of the single-agent can be solved using traditional methods in computational economics. In DolARK, we use <a href="https://github.com/EconForge/dolo">dolo</a> to do so. At this point, the only relevant question concerns the proper writing of the YAML file including these aggregate endogenous variables.</p>
-<h3 id="the-yaml-file">The YAML file</h3>
-<p>To be more specific, the introduction of aggregate endogenous variables amends the YAML file in two steps:</p>
+<p>Recall the setup of a single-agent problem, as solved by
+<a href="https://github.com/EconForge/dolo">dolo</a>: agent <span><span class="MathJax_Preview">i</span><script type="math/tex">i</script></span> attempts to control a stochastic process, driven by exogenous process <span><span class="MathJax_Preview">m_t</span><script type="math/tex">m_t</script></span>, by choosing decisions <span><span class="MathJax_Preview">x_t</span><script type="math/tex">x_t</script></span> so that the evolution of the endogenous state is:</p>
+<div>
+<div class="MathJax_Preview">s_t = g(e_{t-1}, s_{t-1}, x_{t-1}, e_t)</div>
+<script type="math/tex; mode=display">s_t = g(e_{t-1}, s_{t-1}, x_{t-1}, e_t)</script>
+</div>
+<p>where <span><span class="MathJax_Preview">g</span><script type="math/tex">g</script></span> is a known function. Since <span><span class="MathJax_Preview">m_t</span><script type="math/tex">m_t</script></span> follows a markov chain, <span><span class="MathJax_Preview">m_{t+1}</span><script type="math/tex">m_{t+1}</script></span> is known using m_t and the arbitrage equation is written:</p>
+<div>
+<div class="MathJax_Preview">E_{e_{t+1}|e_t} = \left[ f(e_t, s_t, x_t, e_{t+1}, s_{t+1}, x_{t+1})\right]</div>
+<script type="math/tex; mode=display">E_{e_{t+1}|e_t} = \left[ f(e_t, s_t, x_t, e_{t+1}, s_{t+1}, x_{t+1})\right]</script>
+</div>
+<p>for some known function <span><span class="MathJax_Preview">f</span><script type="math/tex">f</script></span>, called arbitrage function. Optimal choice is function <span><span class="MathJax_Preview">\varphi()</span><script type="math/tex">\varphi()</script></span>, such that <span><span class="MathJax_Preview">x_t=\varphi(e_t, s_t)</span><script type="math/tex">x_t=\varphi(e_t, s_t)</script></span>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>For a basic consumption savings problem, endogenous state is level of assets <span><span class="MathJax_Preview">a_t</span><script type="math/tex">a_t</script></span>, the control the re-invested amount <span><span class="MathJax_Preview">i_t</span><script type="math/tex">i_t</script></span> so that that the law of motion of asset holdings is:</p>
+<div>
+<div class="MathJax_Preview">a_t = (i_{t-1})(1+r_t) + exp(\epsilon_t)w_t</div>
+<script type="math/tex; mode=display">a_t = (i_{t-1})(1+r_t) + exp(\epsilon_t)w_t</script>
+</div>
+<p>where <span><span class="MathJax_Preview">\epsilon_t</span><script type="math/tex">\epsilon_t</script></span> is an idiosyncratic process for efficiency and <span><span class="MathJax_Preview">r_t</span><script type="math/tex">r_t</script></span> (resp. <span><span class="MathJax_Preview">w_t</span><script type="math/tex">w_t</script></span>) a process for interest rate (resp. wage.).</p>
+<p>The optimality condition is:</p>
+<div>
+<div class="MathJax_Preview">β E_t \left[ \frac{U^{\prime}(\overbrace{a_{t+1}-i_{t+1}}^{c_{t+1}})}{U^{\prime}(\underbrace{a_{t}-i_{t}}_{c_t})}r_{t+1}\right]=1</div>
+<script type="math/tex; mode=display">β E_t \left[ \frac{U^{\prime}(\overbrace{a_{t+1}-i_{t+1}}^{c_{t+1}})}{U^{\prime}(\underbrace{a_{t}-i_{t}}_{c_t})}r_{t+1}\right]=1</script>
+</div>
+<p>For a traditional one agent problem, <span><span class="MathJax_Preview">r_t</span><script type="math/tex">r_t</script></span> and <span><span class="MathJax_Preview">w_t</span><script type="math/tex">w_t</script></span> are typically equal to <span><span class="MathJax_Preview">\overline{r}</span><script type="math/tex">\overline{r}</script></span> and <span><span class="MathJax_Preview">\overline{w}</span><script type="math/tex">\overline{w}</script></span> and <span><span class="MathJax_Preview">\epsilon_t</span><script type="math/tex">\epsilon_t</script></span> an AR1.</p>
 <ol>
-<li>Aggregate endogenous variables are first declared in the <code>exogenous</code> subsection of the <code>symbols</code> section.</li>
-<li>We then specify an additional <code>!ConstantProcess</code> entry in the <code>exogenous</code> section to initalize the behavior of aggregate endogenous variables.</li>
+<li>Since <span><span class="MathJax_Preview">\overline{w}</span><script type="math/tex">\overline{w}</script></span> and <span><span class="MathJax_Preview">\overline{r}</span><script type="math/tex">\overline{r}</script></span> are constant, they can be declared as parameters in the <code>symbols</code> section of the model:
+<pre class="highlight"><code>symbols:
+    states: [a]
+    exogenous: [e]
+    parameters: [β, γ, ρ, σ, w, r]</code></pre></li>
+<li>In the <code>exogenous</code> section
+<pre class="highlight"><code>exogenous:
+    e: !AR1
+        ρ: 0.9
+        σ: 0.01</code></pre></li>
 </ol>
-<p>The rest of the YAML file writes following the <a href="https://dolo.readthedocs.io/en/latest/">documentation of dolo</a></p>
-<h3 id="an-example-aiyagari-1994">An Example: Aiyagari (1994)</h3>
-<p>Consider the model proposed by Aiyagari (1994). The economy includes one homogeneous good, which is produced with labor and capital. There exists a continuum of households who inelastically supply labor, receive wage <span><span class="MathJax_Preview">w</span><script type="math/tex">w</script></span> and face idiosyncratic employment shocks <span><span class="MathJax_Preview">e</span><script type="math/tex">e</script></span>. Households may consume <span><span class="MathJax_Preview">c</span><script type="math/tex">c</script></span> and save <span><span class="MathJax_Preview">a</span><script type="math/tex">a</script></span>, which yields interests at rate <span><span class="MathJax_Preview">r</span><script type="math/tex">r</script></span>. Households are credit-constrained ; they cannot borrow beyond a cap <span><span class="MathJax_Preview">\underline{a}</span><script type="math/tex">\underline{a}</script></span>. An household's value function verifies</p>
-<p><span><span class="MathJax_Preview">v_t(k_t) = \max_{c_t} u(c_t) + \beta \mathbb E_t v_{t+1}(k_{t+1})</span><script type="math/tex">v_t(k_t) = \max_{c_t} u(c_t) + \beta \mathbb E_t v_{t+1}(k_{t+1})</script></span></p>
-<p>subject to
-<span><span class="MathJax_Preview"><span><span class="MathJax_Preview">c_t + a_{t+1} =  (1+r) a_t + e_t w \quad \text{and} \quad a \geq \underline{a}</span><script type="math/tex">c_t + a_{t+1} =  (1+r) a_t + e_t w \quad \text{and} \quad a \geq \underline{a}</script></span></span><script type="math/tex"><span><span class="MathJax_Preview">c_t + a_{t+1} =  (1+r) a_t + e_t w \quad \text{and} \quad a \geq \underline{a}</span><script type="math/tex">c_t + a_{t+1} =  (1+r) a_t + e_t w \quad \text{and} \quad a \geq \underline{a}</script></span></script></span></p>
-<p>Firms in perfect competition produce the homogeneous good with a Cobb-Douglas technology and choose inputs to maximize profits. Thus, the representative firm's program is</p>
+</div>
+<p>In Dolark, the behaviour of each agent is defined by the exact same functions <span><span class="MathJax_Preview">f</span><script type="math/tex">f</script></span> and <span><span class="MathJax_Preview">g</span><script type="math/tex">g</script></span>, with a small modification to the way the exogenous process is modeled. We assume there is a state of the world <span><span class="MathJax_Preview">ω_t</span><script type="math/tex">ω_t</script></span>, whose stochastic process is known to the agent, and a projection function <span><span class="MathJax_Preview">p()</span><script type="math/tex">p()</script></span> which defines relevant exogenous states of the agent: <span><span class="MathJax_Preview">m_t=p(ω_t)</span><script type="math/tex">m_t=p(ω_t)</script></span>. Since <span><span class="MathJax_Preview">ω_t</span><script type="math/tex">ω_t</script></span> is required to predict <span><span class="MathJax_Preview">\omega_{t+1}</span><script type="math/tex">\omega_{t+1}</script></span>, the optimality condition becomes:</p>
+<div>
+<div class="MathJax_Preview">E_{\color{\red}{ω_{t+1}}|\color{\red}{ω_t}} = \left[ f(m_t, s_t, x_t, m_{t+1}, s_{t+1}, x_{t+1})\right]</div>
+<script type="math/tex; mode=display">E_{\color{\red}{ω_{t+1}}|\color{\red}{ω_t}} = \left[ f(m_t, s_t, x_t, m_{t+1}, s_{t+1}, x_{t+1})\right]</script>
+</div>
+<p>or</p>
+<div>
+<div class="MathJax_Preview">E_{\color{\red}{ω_{t+1}}|\color{\red}{ω_t}} = \left[ f(p(\color{\red}{ω_t}), s_t, x_t, p(\color{\red}{ω_{t+1}}), s_{t+1}, x_{t+1})\right]</div>
+<script type="math/tex; mode=display">E_{\color{\red}{ω_{t+1}}|\color{\red}{ω_t}} = \left[ f(p(\color{\red}{ω_t}), s_t, x_t, p(\color{\red}{ω_{t+1}}), s_{t+1}, x_{t+1})\right]</script>
+</div>
+<p>Optimal choice is now a function <span><span class="MathJax_Preview">\varphi()</span><script type="math/tex">\varphi()</script></span>, such that <span><span class="MathJax_Preview">x_t=\varphi(\color{\red}{ω_t}, s_t)</span><script type="math/tex">x_t=\varphi(\color{\red}{ω_t}, s_t)</script></span>. The construction of <span><span class="MathJax_Preview">\omega_t</span><script type="math/tex">\omega_t</script></span> and the exact specification of <span><span class="MathJax_Preview">p()</span><script type="math/tex">p()</script></span> is a result from the market equilibrium solution procedure and is typically never constructed explicitly.</p>
+<p>The bottom line is that the agent's problem, and how to solve it, is essentially unchanged, save for the nature of the exogenous process. As a result, the one agent problem can be written using the dolo conventions, and the original routines are run unmodified.</p>
+<p>Variables appearing in the agent's program, which are determined by market interaction, must be defined as exogenous shocks. By convention these aggregate variables, must come before idiosyncratic shocks.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>In this example, the aggregate endogenous variables are the interest rate <span><span class="MathJax_Preview">r</span><script type="math/tex">r</script></span> and the wage <span><span class="MathJax_Preview">w</span><script type="math/tex">w</script></span>. The two modifications stated in the previous paragraph appear below</p>
+<ol>
+<li>in the <code>exogenous</code> subsection of the <code>symbols</code> section <code>r</code> and <code>w</code> are declared as exogenous, and declared <em>before</em> the idiosyncratic shocks <code>e</code>.
+<pre class="highlight"><code>    symbols:
+    ...
+        exogenous: [r,w,e]
+    ...</code></pre></li>
+<li>in the <code>exogenous</code> section
+<pre class="highlight"><code>exogenous:
+...
+    r,w: !ConstantProcess
+        μ: [r, w]
+    e: !AR1
+        ρ: 0.9
+        σ: 0.01
+    ...</code></pre></li>
+</ol>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Note that it is not mandatory to use a <code>!ConstantProcess</code>. Any type of process could be used
+here. It is merely a place holder and the aggregate solution procedure, will seek to replace it by a suitable process, for instance a Markov Chain or a perturbed process.</p>
+</div>
+<p>The rest of the YAML file writes following the <a href="https://dolo.readthedocs.io/en/latest/">documentation of dolo</a>. See the full source below.</p>
+<details class="note"><summary>Ayiagari (1994): consumption savings model</summary><pre class="highlight"><code>symbols:
+    states: [a]
+    exogenous: [r, w, e]
+    parameters: [alpha, L, delta, beta, a_min, a_max]
+    controls: [i]
+
+definitions:
+    c: (1+r)*a+w*exp(e) - i
+
+equations:
+
+    arbitrage:
+        - 1-beta*(1+r(+1))*c/c(+1) | -B &lt;= i &lt;= (1+r)*a+w*exp(e)
+
+    transition:
+        - a = i(-1)
+
+calibration:
+    ...
+    r: alpha*(L/K)**(1-alpha) - delta
+    w: (1-alpha)*(K/L)**(alpha)
+    ...
+
+domain:
+    a: [a_min, a_max]
+
+exogenous:
+    r,w: !ConstantProcess
+        μ: [r, w]
+    e: !VAR1
+        ρ: 0.95
+        Σ: [[0.06**2]]
+
+options:
+    grid:
+        !Cartesian
+        orders: [30]</code></pre>
+
+</details>
+<h3 id="equilibrium-conditions">Equilibrium conditions</h3>
+<p>Consider now a continuum of mass 1, made of agents that are all identical ex-ante.  Consider and aggregate process <span><span class="MathJax_Preview">m_t</span><script type="math/tex">m_t</script></span> and some aggregate equilibrium variables <span><span class="MathJax_Preview">y_t</span><script type="math/tex">y_t</script></span>. Denote by <span><span class="MathJax_Preview">\mu_t</span><script type="math/tex">\mu_t</script></span> the distribution of the endogenous states across all agents and by <span><span class="MathJax_Preview">x_t</span><script type="math/tex">x_t</script></span> the choices made by said agents (the mathematical nature of these objects is left a bit fuzzy for now). The whole economy is specified by:</p>
+<ol>
+<li>a law of motion for process <span><span class="MathJax_Preview">m_t</span><script type="math/tex">m_t</script></span></li>
+<li>a projection function p(.) whose output matches the aggregate exogenous process taken into account by individual agents</li>
+<li>
+<p>equilibrium conditions defined by a function <span><span class="MathJax_Preview">\mathcal{A}</span><script type="math/tex">\mathcal{A}</script></span> such that</p>
+<div>
+<div class="MathJax_Preview">\mathcal{A}\left(m_t, μ_t, x_t, y_t\right) = 0</div>
+<script type="math/tex; mode=display">\mathcal{A}\left(m_t, μ_t, x_t, y_t\right) = 0</script>
+</div>
+</li>
+</ol>
+<details class="alert"><summary>Alert</summary><p>Not happy at all with these notations.</p>
+</details>
+<div class="admonition note">
+<p class="admonition-title">An Example: Aiyagari (1994)</p>
+<p>Here is how wage and interest rate is determined for all agents.
+Firms in perfect competition produce the homogeneous good with a Cobb-Douglas technology and choose inputs to maximize profits. Thus, the representative firm's program is</p>
 <div>
 <div class="MathJax_Preview">\max_{K_t,L} A K^\alpha L^{1-\alpha} - (r+\delta) K_t - w L</div>
 <script type="math/tex; mode=display">\max_{K_t,L} A K^\alpha L^{1-\alpha} - (r+\delta) K_t - w L</script>
 </div>
-<p>where
-- <span><span class="MathJax_Preview">K_t</span><script type="math/tex">K_t</script></span> is aggregate capital
-- <span><span class="MathJax_Preview">L</span><script type="math/tex">L</script></span> is aggregate labor supply
-- <span><span class="MathJax_Preview">\delta</span><script type="math/tex">\delta</script></span> is the depreciation rate of capital
-- <span><span class="MathJax_Preview">A</span><script type="math/tex">A</script></span> is the scale factor of production
-- <span><span class="MathJax_Preview">\alpha</span><script type="math/tex">\alpha</script></span> is the output elasticity w.r.t capital</p>
+<p>where</p>
+<ul>
+<li><span><span class="MathJax_Preview">K_t</span><script type="math/tex">K_t</script></span> is aggregate capital</li>
+<li><span><span class="MathJax_Preview">L</span><script type="math/tex">L</script></span> is aggregate labor supply</li>
+<li><span><span class="MathJax_Preview">\delta</span><script type="math/tex">\delta</script></span> is the depreciation rate of capital</li>
+<li><span><span class="MathJax_Preview">A</span><script type="math/tex">A</script></span> is the scale factor of production</li>
+<li><span><span class="MathJax_Preview">\alpha</span><script type="math/tex">\alpha</script></span> is the output elasticity w.r.t capital</li>
+</ul>
 <p>The first-order conditions of the firm's program deliver expressions for <span><span class="MathJax_Preview">r</span><script type="math/tex">r</script></span> and <span><span class="MathJax_Preview">w</span><script type="math/tex">w</script></span>.</p>
 <div>
 <div class="MathJax_Preview">
@@ -134,56 +258,39 @@ r = A \alpha  \left( \frac{L}{K} \right)^{1 - \alpha} - \delta\\
 w = A (1-\alpha) \left( \frac{L}{K} \right)^{\alpha}
 </script>
 </div>
-<p>In this example, the aggregate endogenous variables are the interest rate <span><span class="MathJax_Preview">r</span><script type="math/tex">r</script></span> and the wage <span><span class="MathJax_Preview">w</span><script type="math/tex">w</script></span>. The two modifications stated in the previous paragraph appear
-1. in the <code>exogenous</code> subsection of the <code>symbols</code> section looks like
-<pre class="highlight"><code>    symbols:
-    ...
-        exogenous: [r,w,e]
-    ...</code></pre>
-2. in the <code>exogenous</code> section
-<pre class="highlight"><code>    exogenous:
-    ...
-        r,w: !ConstantProcess
-            μ: [r, w]
-    ...</code></pre></p>
-<p>Overall, , assuming that logged <span><span class="MathJax_Preview">e</span><script type="math/tex">e</script></span> follow an AR1 with persistence <span><span class="MathJax_Preview">\rho = 0.95</span><script type="math/tex">\rho = 0.95</script></span> and standard deviation <span><span class="MathJax_Preview">\sigma = 0.06</span><script type="math/tex">\sigma = 0.06</script></span>, the corresponding YAML file looks like</p>
-<pre class="highlight"><code>    symbols:
-        states: [a]
-        exogenous: [r, w, e]
-        parameters: [alpha, L, delta, beta, a_min, a_max]
-        controls: [i]
+<pre class="highlight"><code class="language-yaml">symbols:
+    exogenous: [z]
+    aggregate: [K]
+    parameters: [A, alpha, delta, ρ]
 
+calibration:
+    A: 1
+    alpha: 0.36
+    delta: 0.025
+    K: 40
+    z: 0
+    ρ: 0.95
+    σ: 0.025
 
-    definitions:
-        c: (1+r)*a+w*exp(e) - i
+exogenous: !AR1
+    ρ: ρ
+    σ: σ
 
-    equations:
+projection:
+    r: alpha*exp(z)*(N/K)**(1-alpha) - delta
+    w: (1-alpha)*exp(z)*(K/N)**(alpha)
 
-        arbitrage:
-            - 1-beta*(1+r(+1))*c/c(+1) | -B &lt;= i &lt;= (1+r)*a+w*exp(e)
+equilibrium:
+    K = a</code></pre>
 
-        transition:
-            - a = i(-1)
-
-    calibration:
-        ...
-        r: alpha*(L/K)**(1-alpha) - delta
-        w: (1-alpha)*(K/L)**(alpha)
-        ...
-    domain:
-        a: [a_min, a_max]
-
-    exogenous:
-        r,w: !ConstantProcess
-            μ: [r, w]
-        e: !VAR1
-            ρ: 0.95
-            Σ: [[0.06**2]]
-
-    options:
-        grid:
-            !Cartesian
-            orders: [30]</code></pre></div>
+<p>Note the familiarity with the one-agent problem: symbols, calibration of parameters, and definition of exogenous shocks, are defined in exactly the same way.</p>
+<p>It is not necessary to redefine variables that were defined in the agent's program. All these variables are recognized and implicitly indexed. For instance <code>a</code>, which was defined in the preceding section, implicitly stands for <code>a_i</code>.</p>
+<p>Also, the equilibrium condition implicitly features an integration over all agents, so that <code>K=k</code> is intepreted as:</p>
+<div>
+<div class="MathJax_Preview">K_t = \int_i a_{i,t}</div>
+<script type="math/tex; mode=display">K_t = \int_i a_{i,t}</script>
+</div>
+</div></div>
         </div>
 
         <footer class="col-md-12">
@@ -195,7 +302,7 @@ w = A (1-\alpha) \left( \frac{L}{K} \right)^{\alpha}
                 shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
         </script>
         <script src="../js/base.js" defer></script>
-        <script src="../mathjax-config.js" defer></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML" defer></script>
         <script src="https://cdn.jsdelivr.net/npm/vega@5" defer></script>
         <script src="https://cdn.jsdelivr.net/npm/vega-lite@3" defer></script>
         <script src="https://cdn.jsdelivr.net/npm/vega-embed@5" defer></script>
