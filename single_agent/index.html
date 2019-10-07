@@ -156,19 +156,17 @@
 <p>In this example, the aggregate endogenous variables are the interest rate <span><span class="MathJax_Preview">r</span><script type="math/tex">r</script></span> and the wage <span><span class="MathJax_Preview">w</span><script type="math/tex">w</script></span>. The two modifications stated in the previous paragraph appear below</p>
 <ol>
 <li>in the <code>exogenous</code> subsection of the <code>symbols</code> section <code>r</code> and <code>w</code> are declared as exogenous, and declared <em>before</em> the idiosyncratic shocks <code>e</code>.
-<pre class="highlight"><code>    symbols:
+<pre class="highlight"><code>symbols:
     ...
-        exogenous: [r,w,e]
-    ...</code></pre></li>
+    exogenous: [r,w,e]
+...</code></pre></li>
 <li>in the <code>exogenous</code> section
 <pre class="highlight"><code>exogenous:
-...
     r,w: !ConstantProcess
         μ: [r, w]
     e: !AR1
         ρ: 0.9
-        σ: 0.01
-    ...</code></pre></li>
+        σ: 0.01</code></pre></li>
 </ol>
 </div>
 <div class="admonition warning">
@@ -284,7 +282,7 @@ equilibrium:
     K = a</code></pre>
 
 <p>Note the familiarity with the one-agent problem: symbols, calibration of parameters, and definition of exogenous shocks, are defined in exactly the same way.</p>
-<p>It is not necessary to redefine variables that were defined in the agent's program. All these variables are recognized and implicitly indexed. For instance <code>a</code>, which was defined in the preceding section, implicitly stands for <code>a_i</code>.</p>
+<p>It is not necessary to redefine variables that were defined in the agent's program. All these variables are recognized and implicitly indexed. For instance <code>a</code>, which was defined in the preceding section, implicitly stands for <span><span class="MathJax_Preview">a_i</span><script type="math/tex">a_i</script></span>.</p>
 <p>Also, the equilibrium condition implicitly features an integration over all agents, so that <code>K=k</code> is intepreted as:</p>
 <div>
 <div class="MathJax_Preview">K_t = \int_i a_{i,t}</div>
