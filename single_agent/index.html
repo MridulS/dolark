@@ -8,7 +8,7 @@
         
         
         <link rel="shortcut icon" href="../img/favicon.ico">
-        <title>Single agent - DolARK</title>
+        <title>Single Agent - DolARK</title>
         <link href="../css/bootstrap-custom.min.css" rel="stylesheet">
         <link href="../css/font-awesome.min.css" rel="stylesheet">
         <link href="../css/base.css" rel="stylesheet">
@@ -50,6 +50,9 @@
                             <li >
                                 <a href="..">Home</a>
                             </li>
+                            <li class="active">
+                                <a href="./">Single Agent</a>
+                            </li>
                             <li >
                                 <a href="../equilibrium/">Equilibrium</a>
                             </li>
@@ -70,6 +73,16 @@
                                 <i class="fa fa-search"></i> Search
                             </a>
                         </li>
+                            <li >
+                                <a rel="next" href="..">
+                                    <i class="fa fa-arrow-left"></i> Previous
+                                </a>
+                            </li>
+                            <li >
+                                <a rel="prev" href="../equilibrium/">
+                                    Next <i class="fa fa-arrow-right"></i>
+                                </a>
+                            </li>
                     </ul>
                 </div>
             </div>
@@ -88,20 +101,17 @@
 <h2 id="single-agent-program">Single-Agent Program</h2>
 <p>Given a vector of aggregate endogenous variables (e.g. wages or interest rates), the program of the single-agent can be solved using traditional methods in computational economics. In DolARK, we use <a href="https://github.com/EconForge/dolo">dolo</a> to do so. At this point, the only relevant question concerns the proper writing of the YAML file including these aggregate endogenous variables.</p>
 <h3 id="the-yaml-file">The YAML file</h3>
-<p>To be more specific, the introduction of aggregate endogenous variables amends the YAML file in two ways:
-1. Aggregate endogenous variables are first declared in the <code>exogenous</code> subsection of the <code>symbols</code> section.
-2. We then specify an additional <code>!ConstantProcess</code> entry in the <code>exogenous</code> section to initalize the behavior of aggregate endogenous variables.</p>
+<p>To be more specific, the introduction of aggregate endogenous variables amends the YAML file in two steps:</p>
+<ol>
+<li>Aggregate endogenous variables are first declared in the <code>exogenous</code> subsection of the <code>symbols</code> section.</li>
+<li>We then specify an additional <code>!ConstantProcess</code> entry in the <code>exogenous</code> section to initalize the behavior of aggregate endogenous variables.</li>
+</ol>
 <p>The rest of the YAML file writes following the <a href="https://dolo.readthedocs.io/en/latest/">documentation of dolo</a></p>
 <h3 id="an-example-aiyagari-1994">An Example: Aiyagari (1994)</h3>
 <p>Consider the model proposed by Aiyagari (1994). The economy includes one homogeneous good, which is produced with labor and capital. There exists a continuum of households who inelastically supply labor, receive wage <span><span class="MathJax_Preview">w</span><script type="math/tex">w</script></span> and face idiosyncratic employment shocks <span><span class="MathJax_Preview">e</span><script type="math/tex">e</script></span>. Households may consume <span><span class="MathJax_Preview">c</span><script type="math/tex">c</script></span> and save <span><span class="MathJax_Preview">a</span><script type="math/tex">a</script></span>, which yields interests at rate <span><span class="MathJax_Preview">r</span><script type="math/tex">r</script></span>. Households are credit-constrained ; they cannot borrow beyond a cap <span><span class="MathJax_Preview">\underline{a}</span><script type="math/tex">\underline{a}</script></span>. An household's value function verifies</p>
-<div>
-<div class="MathJax_Preview">v_t(k_t) = \max_{c_t} u(c_t) + \beta \mathbb E_t v_{t+1}(k_{t+1})$$
-subject to
-$$c_t + a_{t+1} =  (1+r) a_t + e_t w \quad \text{and} \quad a \geq \underline{a}</div>
-<script type="math/tex; mode=display">v_t(k_t) = \max_{c_t} u(c_t) + \beta \mathbb E_t v_{t+1}(k_{t+1})$$
-subject to
-$$c_t + a_{t+1} =  (1+r) a_t + e_t w \quad \text{and} \quad a \geq \underline{a}</script>
-</div>
+<p><span><span class="MathJax_Preview">v_t(k_t) = \max_{c_t} u(c_t) + \beta \mathbb E_t v_{t+1}(k_{t+1})</span><script type="math/tex">v_t(k_t) = \max_{c_t} u(c_t) + \beta \mathbb E_t v_{t+1}(k_{t+1})</script></span></p>
+<p>subject to
+<span><span class="MathJax_Preview"><span><span class="MathJax_Preview">c_t + a_{t+1} =  (1+r) a_t + e_t w \quad \text{and} \quad a \geq \underline{a}</span><script type="math/tex">c_t + a_{t+1} =  (1+r) a_t + e_t w \quad \text{and} \quad a \geq \underline{a}</script></span></span><script type="math/tex"><span><span class="MathJax_Preview">c_t + a_{t+1} =  (1+r) a_t + e_t w \quad \text{and} \quad a \geq \underline{a}</span><script type="math/tex">c_t + a_{t+1} =  (1+r) a_t + e_t w \quad \text{and} \quad a \geq \underline{a}</script></span></script></span></p>
 <p>Firms in perfect competition produce the homogeneous good with a Cobb-Douglas technology and choose inputs to maximize profits. Thus, the representative firm's program is</p>
 <div>
 <div class="MathJax_Preview">\max_{K_t,L} A K^\alpha L^{1-\alpha} - (r+\delta) K_t - w L</div>
@@ -186,7 +196,9 @@ w = A (1-\alpha) \left( \frac{L}{K} \right)^{\alpha}
         </script>
         <script src="../js/base.js" defer></script>
         <script src="../mathjax-config.js" defer></script>
-        <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" defer></script>
+        <script src="https://cdn.jsdelivr.net/npm/vega@5" defer></script>
+        <script src="https://cdn.jsdelivr.net/npm/vega-lite@3" defer></script>
+        <script src="https://cdn.jsdelivr.net/npm/vega-embed@5" defer></script>
         <script src="../search/main.js" defer></script>
 
         <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="Search Modal" aria-hidden="true">
