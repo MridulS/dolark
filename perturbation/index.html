@@ -51,7 +51,7 @@
                                 <a href="..">Home</a>
                             </li>
                             <li >
-                                <a href="../single_agent/">Single Agent</a>
+                                <a href="../single_agent/">Model Definition</a>
                             </li>
                             <li >
                                 <a href="../equilibrium/">Equilibrium</a>
@@ -96,7 +96,55 @@
 </div></div>
                 <div class="col-md-9" role="main">
 
-<h2 id="perturbation-wrt-aggregate-state">Perturbation w.r.t. aggregate state.</h2></div>
+<h2 id="perturbation-wrt-aggregate-state">Perturbation w.r.t. aggregate state.</h2>
+<p>Implementation restrictions:</p>
+<ul>
+<li>ex ante identical agents</li>
+<li>agents idiosyncratic shocks must be discretizable by markov chains</li>
+<li>aggregate shock is an AR1 (possibly multivariate)</li>
+</ul>
+<p>Notations (vague):</p>
+<ul>
+<li><span><span class="MathJax_Preview">m_t</span><script type="math/tex">m_t</script></span> is the aggregate shock, associated to transition function such that <span><span class="MathJax_Preview">m_t = \tau(m_{t-1}, \epsilon_t)</span><script type="math/tex">m_t = \tau(m_{t-1}, \epsilon_t)</script></span></li>
+<li><span><span class="MathJax_Preview">x_t</span><script type="math/tex">x_t</script></span> is a vector representing the values of the decision rule of all agents at date t. Denote by <span><span class="MathJax_Preview">\varphi^{x_t}()</span><script type="math/tex">\varphi^{x_t}()</script></span> the decision rule it determines. Denote by <span><span class="MathJax_Preview">T</span><script type="math/tex">T</script></span> the time iteration operator which pins down optimal decision today as a function of decisions tomorrow.</li>
+<li><span><span class="MathJax_Preview">y_t</span><script type="math/tex">y_t</script></span> is the vector of aggregate prices</li>
+<li><span><span class="MathJax_Preview">\mu_t</span><script type="math/tex">\mu_t</script></span> is a vector representing the distributions of agents across endogenous and exogenous states</li>
+<li><span><span class="MathJax_Preview">\Pi(m_t, x_t, y_t)</span><script type="math/tex">\Pi(m_t, x_t, y_t)</script></span> is the transition matrix, associated to policy <span><span class="MathJax_Preview">x_t</span><script type="math/tex">x_t</script></span> across the individual's states</li>
+</ul>
+<p>Recall the definition of the equilibrium function:</p>
+<div>
+<div class="MathJax_Preview">\int \mathcal{E}\left(e, s, x_t(e,s), y_t\right) d \mu_t(e,s)= 0</div>
+<script type="math/tex; mode=display">\int \mathcal{E}\left(e, s, x_t(e,s), y_t\right) d \mu_t(e,s)= 0</script>
+</div>
+<p>Knowing the approximate decision rule <span><span class="MathJax_Preview">x_t</span><script type="math/tex">x_t</script></span> and distribution <span><span class="MathJax_Preview">\mu_t</span><script type="math/tex">\mu_t</script></span> the above equation is naturally approximated by a function <span><span class="MathJax_Preview">\mathcal{A}</span><script type="math/tex">\mathcal{A}</script></span> such that:</p>
+<div>
+<div class="MathJax_Preview">\mathcal{A}(m_t, \mu_t, x_t, y_t) = \int \mathcal{E}\left(e, s, \varphi^{x_t}(e,s), y_t\right) d \mu(e,s)</div>
+<script type="math/tex; mode=display">\mathcal{A}(m_t, \mu_t, x_t, y_t) = \int \mathcal{E}\left(e, s, \varphi^{x_t}(e,s), y_t\right) d \mu(e,s)</script>
+</div>
+<p>The whole economy is characterized by the following equations:</p>
+<ul>
+<li>transition (<span><span class="MathJax_Preview">G</span><script type="math/tex">G</script></span>):</li>
+</ul>
+<div>
+<div class="MathJax_Preview">m_t = \tau(m_{t-1}, \epsilon_t)</div>
+<script type="math/tex; mode=display">m_t = \tau(m_{t-1}, \epsilon_t)</script>
+</div>
+<div>
+<div class="MathJax_Preview">\mu_t = \mu_{t-1}.\Pi(m_{t-1}, x_{t-1}, y_{t-1})</div>
+<script type="math/tex; mode=display">\mu_t = \mu_{t-1}.\Pi(m_{t-1}, x_{t-1}, y_{t-1})</script>
+</div>
+<ul>
+<li>equilibrium (<span><span class="MathJax_Preview">F</span><script type="math/tex">F</script></span>)</li>
+</ul>
+<div>
+<div class="MathJax_Preview">x_t = T(m_t, y_t, m_{t+1}, x_{t+1}, y_{t+1})</div>
+<script type="math/tex; mode=display">x_t = T(m_t, y_t, m_{t+1}, x_{t+1}, y_{t+1})</script>
+</div>
+<div>
+<div class="MathJax_Preview">\mathcal{A}(m_t, \mu_t, x_t, y_t)=0</div>
+<script type="math/tex; mode=display">\mathcal{A}(m_t, \mu_t, x_t, y_t)=0</script>
+</div>
+<p>Note that aggregate states (in the sense that they are predetermined) are <span><span class="MathJax_Preview">m_t</span><script type="math/tex">m_t</script></span> and <span><span class="MathJax_Preview">\mu_t</span><script type="math/tex">\mu_t</script></span> that is the aggregate shock and the distribution of agent's states. The controls are <span><span class="MathJax_Preview">x_t</span><script type="math/tex">x_t</script></span> and <span><span class="MathJax_Preview">y_t</span><script type="math/tex">y_t</script></span> that is agent's decisions and aggregate prices.</p></div>
         </div>
 
         <footer class="col-md-12">

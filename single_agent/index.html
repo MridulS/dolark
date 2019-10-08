@@ -8,7 +8,7 @@
         
         
         <link rel="shortcut icon" href="../img/favicon.ico">
-        <title>Single Agent - DolARK</title>
+        <title>Model Definition - DolARK</title>
         <link href="../css/bootstrap-custom.min.css" rel="stylesheet">
         <link href="../css/font-awesome.min.css" rel="stylesheet">
         <link href="../css/base.css" rel="stylesheet">
@@ -51,7 +51,7 @@
                                 <a href="..">Home</a>
                             </li>
                             <li class="active">
-                                <a href="./">Single Agent</a>
+                                <a href="./">Model Definition</a>
                             </li>
                             <li >
                                 <a href="../equilibrium/">Equilibrium</a>
@@ -91,16 +91,17 @@
         <div class="container">
                 <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
     <ul class="nav bs-sidenav">
-        <li class="main active"><a href="#model-specification">Model specification</a></li>
-            <li><a href="#single-agent-program">Single-Agent Program</a></li>
+        <li class="main active"><a href="#single-agent-program">Single-Agent Program</a></li>
+        <li class="main "><a href="#equilibrium-conditions">Equilibrium conditions</a></li>
+            <li><a href="#ex-ante-identical-agents">Ex ante identical agents</a></li>
+            <li><a href="#ex-ante-heterogeneous-agents">Ex ante heterogeneous agents</a></li>
     </ul>
 </div></div>
                 <div class="col-md-9" role="main">
 
-<h1 id="model-specification">Model specification</h1>
-<h2 id="single-agent-program">Single-Agent Program</h2>
+<h1 id="single-agent-program">Single-Agent Program</h1>
 <p>Recall the setup of a single-agent problem, as solved by
-<a href="https://github.com/EconForge/dolo">dolo</a>: agent <span><span class="MathJax_Preview">i</span><script type="math/tex">i</script></span> attempts to control a stochastic process, driven by exogenous process <span><span class="MathJax_Preview">m_t</span><script type="math/tex">m_t</script></span>, by choosing decisions <span><span class="MathJax_Preview">x_t</span><script type="math/tex">x_t</script></span> so that the evolution of the endogenous state is:</p>
+<a href="https://github.com/EconForge/dolo">dolo</a>: an agent attempts to control a stochastic process, driven by exogenous process <span><span class="MathJax_Preview">m_t</span><script type="math/tex">m_t</script></span>, by choosing decisions <span><span class="MathJax_Preview">x_t</span><script type="math/tex">x_t</script></span> so that the evolution of the endogenous state is:</p>
 <div>
 <div class="MathJax_Preview">s_t = g(e_{t-1}, s_{t-1}, x_{t-1}, e_t)</div>
 <script type="math/tex; mode=display">s_t = g(e_{t-1}, s_{t-1}, x_{t-1}, e_t)</script>
@@ -138,10 +139,10 @@
         σ: 0.01</code></pre></li>
 </ol>
 </div>
-<p>In Dolark, the behaviour of each agent is defined by the exact same functions <span><span class="MathJax_Preview">f</span><script type="math/tex">f</script></span> and <span><span class="MathJax_Preview">g</span><script type="math/tex">g</script></span>, with a small modification to the way the exogenous process is modeled. We assume there is a state of the world <span><span class="MathJax_Preview">ω_t</span><script type="math/tex">ω_t</script></span>, whose stochastic process is known to the agent, and a projection function <span><span class="MathJax_Preview">p()</span><script type="math/tex">p()</script></span> which defines relevant exogenous states of the agent: <span><span class="MathJax_Preview">m_t=p(ω_t)</span><script type="math/tex">m_t=p(ω_t)</script></span>. Since <span><span class="MathJax_Preview">ω_t</span><script type="math/tex">ω_t</script></span> is required to predict <span><span class="MathJax_Preview">\omega_{t+1}</span><script type="math/tex">\omega_{t+1}</script></span>, the optimality condition becomes:</p>
+<p>In Dolark, the behaviour of each agent is defined by the exact same functions <span><span class="MathJax_Preview">f</span><script type="math/tex">f</script></span> and <span><span class="MathJax_Preview">g</span><script type="math/tex">g</script></span>, with a small modification to the way the exogenous process is modeled. We assume there is a state of the world <span><span class="MathJax_Preview">ω_t</span><script type="math/tex">ω_t</script></span>, whose stochastic process is known to the agent, and a projection function <span><span class="MathJax_Preview">p()</span><script type="math/tex">p()</script></span> which defines relevant exogenous states of the agent: <span><span class="MathJax_Preview">e_t=p(ω_t)</span><script type="math/tex">e_t=p(ω_t)</script></span>. Since <span><span class="MathJax_Preview">ω_t</span><script type="math/tex">ω_t</script></span> is required to predict <span><span class="MathJax_Preview">\omega_{t+1}</span><script type="math/tex">\omega_{t+1}</script></span>, the optimality condition becomes:</p>
 <div>
-<div class="MathJax_Preview">E_{\color{\red}{ω_{t+1}}|\color{\red}{ω_t}} = \left[ f(m_t, s_t, x_t, m_{t+1}, s_{t+1}, x_{t+1})\right]</div>
-<script type="math/tex; mode=display">E_{\color{\red}{ω_{t+1}}|\color{\red}{ω_t}} = \left[ f(m_t, s_t, x_t, m_{t+1}, s_{t+1}, x_{t+1})\right]</script>
+<div class="MathJax_Preview">E_{\color{\red}{ω_{t+1}}|\color{\red}{ω_t}} = \left[ f(e_t, s_t, x_t, e_{t+1}, s_{t+1}, x_{t+1})\right]</div>
+<script type="math/tex; mode=display">E_{\color{\red}{ω_{t+1}}|\color{\red}{ω_t}} = \left[ f(e_t, s_t, x_t, e_{t+1}, s_{t+1}, x_{t+1})\right]</script>
 </div>
 <p>or</p>
 <div>
@@ -171,7 +172,7 @@
 </div>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
-<p>Note that it is not mandatory to use a <code>!ConstantProcess</code>. Any type of process could be used
+<p>Note that it is not mandatory to use a <code>!ConstantProcess</code> for shocks determined at the aggegate level. Any type of process could be used
 here. It is merely a place holder and the aggregate solution procedure, will seek to replace it by a suitable process, for instance a Markov Chain or a perturbed process.</p>
 </div>
 <p>The rest of the YAML file writes following the <a href="https://dolo.readthedocs.io/en/latest/">documentation of dolo</a>. See the full source below.</p>
@@ -214,21 +215,30 @@ options:
         orders: [30]</code></pre>
 
 </details>
-<h3 id="equilibrium-conditions">Equilibrium conditions</h3>
-<p>Consider now a continuum of mass 1, made of agents that are all identical ex-ante.  Consider and aggregate process <span><span class="MathJax_Preview">m_t</span><script type="math/tex">m_t</script></span> and some aggregate equilibrium variables <span><span class="MathJax_Preview">y_t</span><script type="math/tex">y_t</script></span>. Denote by <span><span class="MathJax_Preview">\mu_t</span><script type="math/tex">\mu_t</script></span> the distribution of the endogenous states across all agents and by <span><span class="MathJax_Preview">x_t</span><script type="math/tex">x_t</script></span> the choices made by said agents (the mathematical nature of these objects is left a bit fuzzy for now). The whole economy is specified by:</p>
+<h1 id="equilibrium-conditions">Equilibrium conditions</h1>
+<h2 id="ex-ante-identical-agents">Ex ante identical agents</h2>
+<p>Consider now a continuum of mass 1, made of agents that are all identical ex-ante.  Consider an aggregate process <span><span class="MathJax_Preview">m_t</span><script type="math/tex">m_t</script></span> and some aggregate equilibrium variables <span><span class="MathJax_Preview">y_t</span><script type="math/tex">y_t</script></span> (also called abusively "prices"). Denote by <span><span class="MathJax_Preview">(e,s)\rightarrow\mu_t(e,s)</span><script type="math/tex">(e,s)\rightarrow\mu_t(e,s)</script></span> the distribution of the endogenous states across all agents and by <span><span class="MathJax_Preview">x_t</span><script type="math/tex">x_t</script></span> the choices made by said agents (the mathematical nature of these objects is left a bit fuzzy for now). The whole economy is specified by:</p>
 <ol>
-<li>a law of motion for process <span><span class="MathJax_Preview">m_t</span><script type="math/tex">m_t</script></span></li>
-<li>a projection function p(.) whose output matches the aggregate exogenous process taken into account by individual agents</li>
+<li>A law of motion for process <span><span class="MathJax_Preview">m_t</span><script type="math/tex">m_t</script></span></li>
+<li>A projection function p(.) whose output matches the aggregate exogenous process taken into account by individual agents</li>
 <li>
-<p>equilibrium conditions defined by a function <span><span class="MathJax_Preview">\mathcal{A}</span><script type="math/tex">\mathcal{A}</script></span> such that</p>
+<p>Equilibrium conditions defined by a function <span><span class="MathJax_Preview">\mathcal{E}</span><script type="math/tex">\mathcal{E}</script></span> such that</p>
 <div>
-<div class="MathJax_Preview">\mathcal{A}\left(m_t, μ_t, x_t, y_t\right) = 0</div>
-<script type="math/tex; mode=display">\mathcal{A}\left(m_t, μ_t, x_t, y_t\right) = 0</script>
+<div class="MathJax_Preview">\int \mathcal{E}\left(e_t, s_t, x(e_t,s_t), y_t\right) d \mu(e,s)= 0</div>
+<script type="math/tex; mode=display">\int \mathcal{E}\left(e_t, s_t, x(e_t,s_t), y_t\right) d \mu(e,s)= 0</script>
 </div>
 </li>
 </ol>
-<details class="alert"><summary>Alert</summary><p>Not happy at all with these notations.</p>
-</details>
+<p>where integral is taken over the distribution of agents over all their exogenous and endogenous states.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>In this formulation, <span><span class="MathJax_Preview">m_t</span><script type="math/tex">m_t</script></span> and <span><span class="MathJax_Preview">d \mu_t</span><script type="math/tex">d \mu_t</script></span> are aggregate "states", that is they are predetermined and <span><span class="MathJax_Preview">x_t,y_t</span><script type="math/tex">x_t,y_t</script></span> are aggregate "controls", meaning there is a function <span><span class="MathJax_Preview">\Phi()</span><script type="math/tex">\Phi()</script></span> such that <span><span class="MathJax_Preview">(x_t,y_t)=\Phi(m_t,\mu_t)</span><script type="math/tex">(x_t,y_t)=\Phi(m_t,\mu_t)</script></span>.</p>
+<p>the formulation above implies some restrictions that might be lifted in the future:</p>
+<ul>
+<li>the is is no persistent aggregate endogenous state variable</li>
+<li>equations pinning down the aggregate equilibrium are static. They cannot define forward looking prices.</li>
+</ul>
+</div>
 <div class="admonition note">
 <p class="admonition-title">An Example: Aiyagari (1994)</p>
 <p>Here is how wage and interest rate is determined for all agents.
@@ -282,13 +292,28 @@ equilibrium:
     K = a</code></pre>
 
 <p>Note the familiarity with the one-agent problem: symbols, calibration of parameters, and definition of exogenous shocks, are defined in exactly the same way.</p>
-<p>It is not necessary to redefine variables that were defined in the agent's program. All these variables are recognized and implicitly indexed. For instance <code>a</code>, which was defined in the preceding section, implicitly stands for <span><span class="MathJax_Preview">a_i</span><script type="math/tex">a_i</script></span>.</p>
-<p>Also, the equilibrium condition implicitly features an integration over all agents, so that <code>K=k</code> is intepreted as:</p>
+<p>It is not necessary to redefine variables that were defined in the agent's program. All these variables are recognized and implicitly indexed. For instance <code>a</code>, which was defined in the preceding section and is implicitly with the agents distribution.</p>
+<p>Also, the equilibrium condition implicitly features an integration over all agents, so that <code>K=a</code> is intepreted as:</p>
 <div>
-<div class="MathJax_Preview">K_t = \int_i a_{i,t}</div>
-<script type="math/tex; mode=display">K_t = \int_i a_{i,t}</script>
+<div class="MathJax_Preview">K_t = \int_{e,s} a(e,s) dμ_t(e,s)</div>
+<script type="math/tex; mode=display">K_t = \int_{e,s} a(e,s) dμ_t(e,s)</script>
 </div>
-</div></div>
+</div>
+<h2 id="ex-ante-heterogeneous-agents">Ex ante heterogeneous agents</h2>
+<p>DolARK allows to define models where one or many parameters of one agent's program
+is heterogenous, and distributed after some distribution. This is done by adding a special <code>distribution</code> section.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>To model heterogeneity in the discount factor, add a distribution section:
+<pre class="highlight"><code>distribution:
+    β: !Uniform
+        a: 0.95
+        b: 0.96</code></pre></p>
+<p>The effect of this section will be to instruct dolark to solve for several agents problem for different values of <span><span class="MathJax_Preview">\beta</span><script type="math/tex">\beta</script></span> that approximate distribution <span><span class="MathJax_Preview">\beta</span><script type="math/tex">\beta</script></span></p>
+</div>
+<details class="attention"><summary>Attention</summary><p>There is a second experimental way to model heterogeneity: to treat the heterogenous parameter
+as a persistent shock. To implement it, the agent's problem needs to feature this shock as the first exogenous shock. Note that it can create subtle timing inconsistencies in the model. For instance symbol <code>\beta</code> would be taken as representing <code>β_t</code> which might not be allowed for certain equations specifications. (transitions and arbitrage equations should be fine)</p>
+</details></div>
         </div>
 
         <footer class="col-md-12">
