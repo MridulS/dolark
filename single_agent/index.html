@@ -128,15 +128,17 @@
 <p>For a traditional one agent problem, <span><span class="MathJax_Preview">r_t</span><script type="math/tex">r_t</script></span> and <span><span class="MathJax_Preview">w_t</span><script type="math/tex">w_t</script></span> are typically equal to <span><span class="MathJax_Preview">\overline{r}</span><script type="math/tex">\overline{r}</script></span> and <span><span class="MathJax_Preview">\overline{w}</span><script type="math/tex">\overline{w}</script></span> and <span><span class="MathJax_Preview">\epsilon_t</span><script type="math/tex">\epsilon_t</script></span> an AR1.</p>
 <ol>
 <li>Since <span><span class="MathJax_Preview">\overline{w}</span><script type="math/tex">\overline{w}</script></span> and <span><span class="MathJax_Preview">\overline{r}</span><script type="math/tex">\overline{r}</script></span> are constant, they can be declared as parameters in the <code>symbols</code> section of the model:
-<pre class="highlight"><code>symbols:
+<div class="highlight"><pre><span></span>symbols:
     states: [a]
     exogenous: [e]
-    parameters: [β, γ, ρ, σ, w, r]</code></pre></li>
+    parameters: [β, γ, ρ, σ, w, r]
+</pre></div></li>
 <li>In the <code>exogenous</code> section
-<pre class="highlight"><code>exogenous:
+<div class="highlight"><pre><span></span>exogenous:
     e: !AR1
         ρ: 0.9
-        σ: 0.01</code></pre></li>
+        σ: 0.01
+</pre></div></li>
 </ol>
 </div>
 <p>In Dolark, the behaviour of each agent is defined by the exact same functions <span><span class="MathJax_Preview">f</span><script type="math/tex">f</script></span> and <span><span class="MathJax_Preview">g</span><script type="math/tex">g</script></span>, with a small modification to the way the exogenous process is modeled. We assume there is a state of the world <span><span class="MathJax_Preview">ω_t</span><script type="math/tex">ω_t</script></span>, whose stochastic process is known to the agent, and a projection function <span><span class="MathJax_Preview">p()</span><script type="math/tex">p()</script></span> which defines relevant exogenous states of the agent: <span><span class="MathJax_Preview">e_t=p(ω_t)</span><script type="math/tex">e_t=p(ω_t)</script></span>. Since <span><span class="MathJax_Preview">ω_t</span><script type="math/tex">ω_t</script></span> is required to predict <span><span class="MathJax_Preview">\omega_{t+1}</span><script type="math/tex">\omega_{t+1}</script></span>, the optimality condition becomes:</p>
@@ -157,17 +159,19 @@
 <p>In this example, the aggregate endogenous variables are the interest rate <span><span class="MathJax_Preview">r</span><script type="math/tex">r</script></span> and the wage <span><span class="MathJax_Preview">w</span><script type="math/tex">w</script></span>. The two modifications stated in the previous paragraph appear below</p>
 <ol>
 <li>in the <code>exogenous</code> subsection of the <code>symbols</code> section <code>r</code> and <code>w</code> are declared as exogenous, and declared <em>before</em> the idiosyncratic shocks <code>e</code>.
-<pre class="highlight"><code>symbols:
+<div class="highlight"><pre><span></span>symbols:
     ...
     exogenous: [r,w,e]
-...</code></pre></li>
+...
+</pre></div></li>
 <li>in the <code>exogenous</code> section
-<pre class="highlight"><code>exogenous:
+<div class="highlight"><pre><span></span>exogenous:
     r,w: !ConstantProcess
         μ: [r, w]
     e: !AR1
         ρ: 0.9
-        σ: 0.01</code></pre></li>
+        σ: 0.01
+</pre></div></li>
 </ol>
 </div>
 <div class="admonition warning">
@@ -176,7 +180,7 @@
 here. It is merely a place holder and the aggregate solution procedure, will seek to replace it by a suitable process, for instance a Markov Chain or a perturbed process.</p>
 </div>
 <p>The rest of the YAML file writes following the <a href="https://dolo.readthedocs.io/en/latest/">documentation of dolo</a>. See the full source below.</p>
-<details class="note"><summary>Ayiagari (1994): consumption savings model</summary><pre class="highlight"><code>symbols:
+<details class="note"><summary>Ayiagari (1994): consumption savings model</summary><div class="highlight"><pre><span></span>symbols:
     states: [a]
     exogenous: [r, w, e]
     parameters: [alpha, L, delta, beta, a_min, a_max]
@@ -212,7 +216,8 @@ exogenous:
 options:
     grid:
         !Cartesian
-        orders: [30]</code></pre>
+        orders: [30]
+</pre></div>
 
 </details>
 <h1 id="equilibrium-conditions">Equilibrium conditions</h1>
@@ -266,30 +271,31 @@ r = A \alpha  \left( \frac{L}{K} \right)^{1 - \alpha} - \delta\\
 w = A (1-\alpha) \left( \frac{L}{K} \right)^{\alpha}
 </script>
 </div>
-<pre class="highlight"><code class="language-yaml">symbols:
-    exogenous: [z]
-    aggregate: [K]
-    parameters: [A, alpha, delta, ρ]
+<div class="highlight"><pre><span></span><span class="nt">symbols</span><span class="p">:</span>
+    <span class="nt">exogenous</span><span class="p">:</span> <span class="p p-Indicator">[</span><span class="nv">z</span><span class="p p-Indicator">]</span>
+    <span class="nt">aggregate</span><span class="p">:</span> <span class="p p-Indicator">[</span><span class="nv">K</span><span class="p p-Indicator">]</span>
+    <span class="nt">parameters</span><span class="p">:</span> <span class="p p-Indicator">[</span><span class="nv">A</span><span class="p p-Indicator">,</span> <span class="nv">alpha</span><span class="p p-Indicator">,</span> <span class="nv">delta</span><span class="p p-Indicator">,</span> <span class="nv">ρ</span><span class="p p-Indicator">]</span>
 
-calibration:
-    A: 1
-    alpha: 0.36
-    delta: 0.025
-    K: 40
-    z: 0
-    ρ: 0.95
-    σ: 0.025
+<span class="nt">calibration</span><span class="p">:</span>
+    <span class="nt">A</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">1</span>
+    <span class="nt">alpha</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">0.36</span>
+    <span class="nt">delta</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">0.025</span>
+    <span class="nt">K</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">40</span>
+    <span class="nt">z</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">0</span>
+    <span class="nt">ρ</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">0.95</span>
+    <span class="nt">σ</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">0.025</span>
 
-exogenous: !AR1
-    ρ: ρ
-    σ: σ
+<span class="nt">exogenous</span><span class="p">:</span> <span class="kt">!AR1</span>
+    <span class="nt">ρ</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">ρ</span>
+    <span class="nt">σ</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">σ</span>
 
-projection:
-    r: alpha*exp(z)*(N/K)**(1-alpha) - delta
-    w: (1-alpha)*exp(z)*(K/N)**(alpha)
+<span class="nt">projection</span><span class="p">:</span>
+    <span class="nt">r</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">alpha*exp(z)*(N/K)**(1-alpha) - delta</span>
+    <span class="nt">w</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">(1-alpha)*exp(z)*(K/N)**(alpha)</span>
 
-equilibrium:
-    K = a</code></pre>
+<span class="nt">equilibrium</span><span class="p">:</span>
+    <span class="l l-Scalar l-Scalar-Plain">K = a</span>
+</pre></div>
 
 <p>Note the familiarity with the one-agent problem: symbols, calibration of parameters, and definition of exogenous shocks, are defined in exactly the same way.</p>
 <p>It is not necessary to redefine variables that were defined in the agent's program. All these variables are recognized and implicitly indexed. For instance <code>a</code>, which was defined in the preceding section and is implicitly with the agents distribution.</p>
@@ -305,10 +311,11 @@ is heterogenous, and distributed after some distribution. This is done by adding
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>To model heterogeneity in the discount factor, add a distribution section:
-<pre class="highlight"><code>distribution:
+<div class="highlight"><pre><span></span>distribution:
     β: !Uniform
         a: 0.95
-        b: 0.96</code></pre></p>
+        b: 0.96
+</pre></div></p>
 <p>The effect of this section will be to instruct dolark to solve for several agents problem for different values of <span><span class="MathJax_Preview">\beta</span><script type="math/tex">\beta</script></span> that approximate distribution <span><span class="MathJax_Preview">\beta</span><script type="math/tex">\beta</script></span></p>
 </div>
 <details class="attention"><summary>Attention</summary><p>There is a second experimental way to model heterogeneity: to treat the heterogenous parameter

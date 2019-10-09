@@ -108,26 +108,27 @@
 are pinned down by aggregate conditions. These conditions are fixed in an additional equilibrium
 section.</p>
 <p>Let us start from an example:</p>
-<pre class="highlight"><code class="language-yaml">symbols:
-    exogenous: [z]
-    aggregate: [K]
-    parameters: [A, alpha, delta, ρ]
+<div class="highlight"><pre><span></span><span class="nt">symbols</span><span class="p">:</span>
+    <span class="nt">exogenous</span><span class="p">:</span> <span class="p p-Indicator">[</span><span class="nv">z</span><span class="p p-Indicator">]</span>
+    <span class="nt">aggregate</span><span class="p">:</span> <span class="p p-Indicator">[</span><span class="nv">K</span><span class="p p-Indicator">]</span>
+    <span class="nt">parameters</span><span class="p">:</span> <span class="p p-Indicator">[</span><span class="nv">A</span><span class="p p-Indicator">,</span> <span class="nv">alpha</span><span class="p p-Indicator">,</span> <span class="nv">delta</span><span class="p p-Indicator">,</span> <span class="nv">ρ</span><span class="p p-Indicator">]</span>
 
 
-calibration:
-    A: 1
-    alpha: 0.36
-    delta: 0.025
-    K: 40
-    z: 0
-    ρ: 0.95
+<span class="nt">calibration</span><span class="p">:</span>
+    <span class="nt">A</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">1</span>
+    <span class="nt">alpha</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">0.36</span>
+    <span class="nt">delta</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">0.025</span>
+    <span class="nt">K</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">40</span>
+    <span class="nt">z</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">0</span>
+    <span class="nt">ρ</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">0.95</span>
 
-exogenous: !AR1
-    ρ: ρ
-    σ: σ
+<span class="nt">exogenous</span><span class="p">:</span> <span class="kt">!AR1</span>
+    <span class="nt">ρ</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">ρ</span>
+    <span class="nt">σ</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">σ</span>
 
-equilibrium:
-    K = k</code></pre>
+<span class="nt">equilibrium</span><span class="p">:</span>
+    <span class="l l-Scalar l-Scalar-Plain">K = k</span>
+</pre></div>
 
 <p>Graphical represenation</p>
 <div id="view"></div>
@@ -136,31 +137,32 @@ equilibrium:
 
 <h2 id="heterogeneity">heterogeneity</h2>
 <p>Now, a model with idiosyncratic heterogeneity:</p>
-<pre class="highlight"><code class="language-yaml">symbols:
-    exogenous: [z]
-    aggregate: [K]
-    parameters = [A, alpha, delta, ρ]
-)
+<div class="highlight"><pre><span></span><span class="nt">symbols</span><span class="p">:</span>
+    <span class="nt">exogenous</span><span class="p">:</span> <span class="p p-Indicator">[</span><span class="nv">z</span><span class="p p-Indicator">]</span>
+    <span class="nt">aggregate</span><span class="p">:</span> <span class="p p-Indicator">[</span><span class="nv">K</span><span class="p p-Indicator">]</span>
+    <span class="l l-Scalar l-Scalar-Plain">parameters = [A, alpha, delta, ρ]</span>
+<span class="l l-Scalar l-Scalar-Plain">)</span>
 
-calibration:
-    A: 1
-    alpha: 0.36
-    delta: 0.025
-    K: 40
-    z: 0
-    ρ: 0.95
+<span class="nt">calibration</span><span class="p">:</span>
+    <span class="nt">A</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">1</span>
+    <span class="nt">alpha</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">0.36</span>
+    <span class="nt">delta</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">0.025</span>
+    <span class="nt">K</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">40</span>
+    <span class="nt">z</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">0</span>
+    <span class="nt">ρ</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">0.95</span>
 
-exogenous: !AR1
-    ρ: ρ
-    σ: σ
+<span class="nt">exogenous</span><span class="p">:</span> <span class="kt">!AR1</span>
+    <span class="nt">ρ</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">ρ</span>
+    <span class="nt">σ</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">σ</span>
 
-equilibrium:
-    K = k
+<span class="nt">equilibrium</span><span class="p">:</span>
+    <span class="l l-Scalar l-Scalar-Plain">K = k</span>
 
-heterogeneity:
-    β: !Uniform
-        a: 0.95
-        b: 0.96</code></pre></div>
+<span class="nt">heterogeneity</span><span class="p">:</span>
+    <span class="nt">β</span><span class="p">:</span> <span class="kt">!Uniform</span>
+        <span class="nt">a</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">0.95</span>
+        <span class="nt">b</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">0.96</span>
+</pre></div></div>
         </div>
 
         <footer class="col-md-12">
