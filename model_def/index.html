@@ -132,17 +132,17 @@
 <p>For a traditional one agent problem without aggregate shocks, <span><span class="MathJax_Preview">r_t</span><script type="math/tex">r_t</script></span> and <span><span class="MathJax_Preview">w_t</span><script type="math/tex">w_t</script></span> are typically constant and equal <span><span class="MathJax_Preview">\overline{r}</span><script type="math/tex">\overline{r}</script></span> and <span><span class="MathJax_Preview">\overline{w}</span><script type="math/tex">\overline{w}</script></span> while <span><span class="MathJax_Preview">\epsilon_t^i</span><script type="math/tex">\epsilon_t^i</script></span> follows an AR(1).</p>
 <ol>
 <li>Since <span><span class="MathJax_Preview">\overline{w}</span><script type="math/tex">\overline{w}</script></span> and <span><span class="MathJax_Preview">\overline{r}</span><script type="math/tex">\overline{r}</script></span> are constant, they can be declared as parameters in the <code>symbols</code> section of the model:
-<div class="highlight"><pre><span></span>symbols:
+<div class="highlight"><pre><span></span><code>symbols:
     states: [a]
     exogenous: [e]
     parameters: [β, γ, ρ, σ, w, r]
-</pre></div></li>
+</code></pre></div></li>
 <li>In the <code>exogenous</code> section
-<div class="highlight"><pre><span></span>exogenous:
+<div class="highlight"><pre><span></span><code>exogenous:
     e: !AR1
         ρ: 0.9
         σ: 0.01
-</pre></div></li>
+</code></pre></div></li>
 </ol>
 </div>
 <p>In DolARK, the behavior of each agent is defined by the exact same functions <span><span class="MathJax_Preview">f</span><script type="math/tex">f</script></span> and <span><span class="MathJax_Preview">g</span><script type="math/tex">g</script></span> as in dolo, with a small modification to the way the exogenous process is modeled.</p>
@@ -164,19 +164,19 @@
 <p>In this example, the aggregate endogenous variables are the interest rate <span><span class="MathJax_Preview">r</span><script type="math/tex">r</script></span> and the wage <span><span class="MathJax_Preview">w</span><script type="math/tex">w</script></span>. The two modifications stated in the previous paragraph appear below</p>
 <ol>
 <li>in the <code>exogenous</code> subsection of the <code>symbols</code> section <code>r</code> and <code>w</code> are declared as exogenous, and declared <em>before</em> the idiosyncratic shocks <code>e</code>.
-<div class="highlight"><pre><span></span>symbols:
+<div class="highlight"><pre><span></span><code>symbols:
     ...
     exogenous: [r,w,e]
 ...
-</pre></div></li>
+</code></pre></div></li>
 <li>in the <code>exogenous</code> section
-<div class="highlight"><pre><span></span>exogenous:
+<div class="highlight"><pre><span></span><code>exogenous:
     r,w: !ConstantProcess
         μ: [r, w]
     e: !AR1
         ρ: 0.9
         σ: 0.01
-</pre></div></li>
+</code></pre></div></li>
 </ol>
 </div>
 <div class="admonition warning">
@@ -185,7 +185,7 @@
 here. It is merely a place holder and the aggregate solution procedure, will seek to replace it by a suitable process, for instance a Markov Chain or a perturbed process.</p>
 </div>
 <p>The rest of the YAML file writes following the <a href="https://dolo.readthedocs.io/en/latest/">documentation of dolo</a>. See the full source below.</p>
-<details class="note"><summary>Aiyagari (1994): consumption savings model</summary><div class="highlight"><pre><span></span>symbols:
+<details class="note"><summary>Aiyagari (1994): consumption savings model</summary><div class="highlight"><pre><span></span><code>symbols:
     states: [a]
     exogenous: [r, w, e]
     parameters: [alpha, L, delta, beta, a_min, a_max]
@@ -222,7 +222,7 @@ options:
     grid:
         !Cartesian
         orders: [30]
-</pre></div>
+</code></pre></div>
 
 </details>
 <h2 id="equilibrium-conditions">Equilibrium conditions</h2>
@@ -284,7 +284,7 @@ w_t = A (1-\alpha) z_t \left( \frac{L}{K_t} \right)^{\alpha}
 </script>
 </div>
 <p>While the YAML file for the single-agent is built as described above, the YAML file for the aggregate part writes as follows if <span><span class="MathJax_Preview">z_t</span><script type="math/tex">z_t</script></span> follows a logged AR(1).</p>
-<div class="highlight"><pre><span></span><span class="nt">symbols</span><span class="p">:</span>
+<div class="highlight"><pre><span></span><code><span class="nt">symbols</span><span class="p">:</span>
     <span class="nt">exogenous</span><span class="p">:</span> <span class="p p-Indicator">[</span><span class="nv">z</span><span class="p p-Indicator">]</span>
     <span class="nt">aggregate</span><span class="p">:</span> <span class="p p-Indicator">[</span><span class="nv">K</span><span class="p p-Indicator">]</span>
     <span class="nt">parameters</span><span class="p">:</span> <span class="p p-Indicator">[</span><span class="nv">A</span><span class="p p-Indicator">,</span> <span class="nv">alpha</span><span class="p p-Indicator">,</span> <span class="nv">delta</span><span class="p p-Indicator">,</span> <span class="nv">ρ</span><span class="p p-Indicator">]</span>
@@ -308,7 +308,7 @@ w_t = A (1-\alpha) z_t \left( \frac{L}{K_t} \right)^{\alpha}
 
 <span class="nt">equilibrium</span><span class="p">:</span>
     <span class="l l-Scalar l-Scalar-Plain">K = a</span>
-</pre></div>
+</code></pre></div>
 
 <p>Note the familiarity with the one-agent problem: symbols, calibration of parameters, and definition of exogenous shocks, are defined in exactly the same way.</p>
 <p>It is not necessary to redefine variables that were defined in the agent's program. All these variables are recognized and implicitly indexed. For instance <code>a</code>, which was defined in the preceding section and is implicitly with the agents distribution.</p>
@@ -324,11 +324,11 @@ is heterogenous, and distributed after some distribution. This is done by adding
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>To model heterogeneity in the discount factor, add a distribution section:
-<div class="highlight"><pre><span></span>distribution:
+<div class="highlight"><pre><span></span><code>distribution:
     β: !Uniform
         a: 0.95
         b: 0.96
-</pre></div></p>
+</code></pre></div></p>
 <p>The effect of this section will be to instruct dolark to solve for several agents problem for different values  <span><span class="MathJax_Preview">\beta^i</span><script type="math/tex">\beta^i</script></span> associate with probabilities <span><span class="MathJax_Preview">\pi^i</span><script type="math/tex">\pi^i</script></span> that approximate distribution <span><span class="MathJax_Preview">\beta</span><script type="math/tex">\beta</script></span>. Denote by <span><span class="MathJax_Preview">a^{i_\beta}</span><script type="math/tex">a^{i_\beta}</script></span> and <span><span class="MathJax_Preview">d\mu^{i_{\beta}}</span><script type="math/tex">d\mu^{i_{\beta}}</script></span> the corresponding decision rules and ergodic distributions. The market clearing condition becomes:</p>
 <div>
 <div class="MathJax_Preview">K_t = \int_{β} dπ(β) \int_{e,s} a^{β}(e,s) dμ^{β}_t(e,s)</div>
